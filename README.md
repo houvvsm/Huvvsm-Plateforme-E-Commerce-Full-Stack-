@@ -15,6 +15,9 @@ huvvsm/
 │   │   ├── schema.prisma
 │   │   └── seed.js
 │   │
+│   ├── scripts/
+│   │   └── promoteOwner.js           ← CLI maintenance tool
+│   │
 │   └── src/
 │       ├── admin/
 │       │   ├── adminController.js
@@ -38,12 +41,6 @@ huvvsm/
 │       ├── middleware/
 │       │   ├── authMiddleware.js
 │       │   └── uploadMiddleware.js
-│       │
-│       ├── scripts/
-│       │   ├── testEmailSending.js
-│       │   ├── testRewards.js
-│       │   ├── testGemini.js         ← AI assistant test script
-│       │   └── promoteOwner.js
 │       │
 │       └── routes/
 │           ├── authRoutes.js
