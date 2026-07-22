@@ -1,0 +1,4 @@
+{
+  "ignore": ["public/uploads/*"],
+  "ext": "js,json,prisma"
+}

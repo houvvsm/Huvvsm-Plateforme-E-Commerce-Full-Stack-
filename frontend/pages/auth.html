@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USER_CORE // HUVVSM DIGITAL IDENTITY</title>
+  
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+
+  <style>
+    /* ── PROFILE TABS ── */
+    .profile-tabs {
+      display: flex;
+      gap: 4px;
+      margin: 24px 0 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 0;
+    }
+    .profile-tab {
+      background: none;
+      border: none;
+      color: var(--text-muted, #888);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .profile-tab.active {
+      color: #00E5FF;
+      border-bottom-color: #00E5FF;
+    }
+    .profile-tab-panel { display: none; padding-top: 20px; }
+    .profile-tab-panel.active { display: block; }
+
+    /* ── WISHLIST GRID ── */
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .wishlist-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .wishlist-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-2px); }
+    .wishlist-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+    .wishlist-card-info { padding: 10px; }
+    .wishlist-card-name {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-primary, #fff);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wishlist-card-price {
+      font-size: 12px;
+      color: #00E5FF;
+      font-weight: 600;
+    }
+    .wishlist-card-remove {
+      position: absolute;
+      top: 6px; right: 6px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #ff4d6d;
+      border-radius: 50%;
+      width: 26px; height: 26px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .wishlist-card-remove:hover { background: rgba(255,77,109,0.3); }
+
+    /* ── ORDER HISTORY ── */
+    .order-list { display: flex; flex-direction: column; gap: 14px; }
+    .order-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .order-card:hover { border-color: rgba(139,92,255,0.3); }
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      user-select: none;
+    }
+    .order-card-meta { display: flex; flex-direction: column; gap: 3px; }
+    .order-id { font-size: 10px; letter-spacing: 0.12em; color: #8b5cff; }
+    .order-date { font-size: 11px; color: var(--text-muted, #888); }
+    .order-card-right { display: flex; align-items: center; gap: 14px; }
+    .order-total { font-size: 14px; font-weight: 700; color: #00E5FF; }
+    .order-status {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .status-PENDING    { background: rgba(255,193,7,0.15);  color: #ffc107; border: 1px solid rgba(255,193,7,0.3); }
+    .status-CONFIRMED  { background: rgba(0,229,255,0.1);   color: #00E5FF; border: 1px solid rgba(0,229,255,0.3); }
+    .status-SHIPPED    { background: rgba(139,92,255,0.15); color: #8b5cff; border: 1px solid rgba(139,92,255,0.3); }
+    .status-DELIVERED  { background: rgba(0,255,127,0.1);   color: #00ff7f; border: 1px solid rgba(0,255,127,0.3); }
+    .status-CANCELLED  { background: rgba(255,77,109,0.1);  color: #ff4d6d; border: 1px solid rgba(255,77,109,0.3); }
+    .order-toggle-icon { font-size: 12px; color: var(--text-muted, #888); transition: transform 0.25s; }
+    .order-card.expanded .order-toggle-icon { transform: rotate(180deg); }
+    .order-card-items {
+      display: none;
+      padding: 12px 16px;
+      gap: 10px;
+      flex-direction: column;
+    }
+    .order-card.expanded .order-card-items { display: flex; }
+    .order-item-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .order-item-img {
+      width: 48px; height: 48px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .order-item-info { flex: 1; min-width: 0; }
+    .order-item-name {
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .order-item-meta { font-size: 11px; color: var(--text-muted, #888); margin-top: 2px; }
+    .order-item-price { font-size: 12px; color: #00E5FF; font-weight: 600; white-space: nowrap; }
+
+    /* ── RATE BUTTON ── */
+    .rate-btn {
+      flex-shrink: 0;
+      font-size: 10px !important;
+      letter-spacing: 0.1em;
+      padding: 8px 12px !important;
+      color: #ffc107 !important;
+      border-color: rgba(255,193,7,0.25) !important;
+    }
+    .rate-btn:hover {
+      background: rgba(255,193,7,0.08) !important;
+      border-color: #ffc107 !important;
+    }
+
+    /* ── REVIEW MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3,4,11,0.85);
+      backdrop-filter: blur(16px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .review-modal-card {
+      background: rgba(20,22,35,0.95);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 420px;
+      width: 90%;
+      position: relative;
+    }
+    .review-modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .review-modal-eyebrow {
+      font-family: var(--font-mono, monospace);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: #00E5FF;
+      margin-bottom: 8px;
+    }
+    .review-modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    .star-picker {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .star-pick {
+      font-size: 32px;
+      cursor: pointer;
+      color: #ffc107;
+      transition: transform 0.15s;
+      user-select: none;
+    }
+    .star-pick:hover { transform: scale(1.15); }
+    #reviewComment {
+      width: 100%;
+      min-height: 100px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+      margin-bottom: 16px;
+    }
+    #reviewComment:focus { outline: none; border-color: rgba(0,229,255,0.4); }
+    #reviewError {
+      display: none;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #ff4d6d;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    /* ── EMPTY STATES ── */
+    .panel-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted, #888);
+    }
+    .panel-empty .panel-empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+    .panel-empty p { font-size: 12px; letter-spacing: 0.1em; margin-bottom: 16px; }
+
+    /* ── PANEL LOADER ── */
+    .panel-loading {
+      text-align: center;
+      padding: 30px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #00E5FF;
+      opacity: 0.7;
+    }
+
+    /* ── WIDER PROFILE CARD ── */
+    .profile-card { max-width: 680px !important; width: 100%; }
+
+    @media (max-width: 600px) {
+      .wishlist-grid { grid-template-columns: repeat(2, 1fr); }
+      .order-card-header { flex-wrap: wrap; gap: 8px; }
+    }
+  </style>
+</head>
+<body data-page="auth">
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress">
+      <div class="loader-bar"></div>
+    </div>
+    <div class="loader-status">
+      <span class="glitch-text">AUTHENTICATING_SESSION</span>
+      <span class="binary-stream">10101111 00011010 11011100</span>
+    </div>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="orb-field">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-bg"></div>
+
+<!-- LARGE BACKGROUND TITLE -->
+<div class="auth-title-large">IDENTITY</div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM</span>
+  </a>
+  <nav class="navbar-links">
+    <a href="index.html">HOME</a>
+    <a href="shop.html">CATALOGUE</a>
+    <a href="lookbook.html">LOOKBOOK</a>
+  </nav>
+  <div class="navbar-actions">
+    <button class="navbar-icon-btn active" data-magnetic onclick="window.location='auth.html'" title="Account">👤</button>
+    <button class="navbar-icon-btn" data-magnetic style="position:relative" onclick="window.location='cart.html'" title="Cart">
+      🛒
+      <span class="navbar-badge" data-cart-count style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <button class="navbar-icon-btn" data-magnetic id="mobileMenuBtn">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav-drawer" id="mobileDrawer">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close">×</button>
+    <nav class="mobile-nav-links">
+      <a href="index.html">HOME</a>
+      <a href="shop.html">CATALOGUE</a>
+      <a href="lookbook.html">LOOKBOOK</a>
+      <a href="cart.html">CART</a>
+      <a href="auth.html">ACCOUNT</a>
+    </nav>
+  </div>
+</div>
+
+<main class="auth-container">
+
+  <!-- ══ AUTH CARD (logged out) ══ -->
+  <div class="auth-card" data-reveal id="authCard">
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">LOGIN_ACCESS</button>
+      <button class="auth-tab" data-tab="register">CREATE_ACCOUNT</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="auth-form active">
+      <div class="auth-header">
+        <p class="cyber-eyebrow">// WELCOME BACK USER</p>
+        <h2 class="auth-title">CORE_LOGIN</h2>
+      </div>
+      <div class="input-group">
+        <label class="label">SECURE_EMAIL</label>
+        <input type="email" placeholder="USER@SIGNAL.NET" required class="input">
+      </div>
+      <div class="input-group">
+        <label class="label">ACCESS_KEY</label>
+        <input type="password" placeholder="••••••••" required class="input">
+      </div>
+      <div class="auth-meta">
+        <label class="checkbox-container">
+          <input type="checkbox">
+          <span class="checkmark"></span>
+          KEEP_SIGNAL_ALIVE
+        </label>
+        <a href="#" class="forgot-link">FORGOT_KEY?</a>
+      </div>
+      <button type="submit" class="btn btn-primary w-full">LOG_IN</button>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="registerForm" class="auth-form">
+      <div class="auth-header">
+        <p class="cyber-eyebrow">// NEW IDENTITY DETECTED</p>
+        <h2 class="auth-title">CREATE_CORE</h2>
+      </div>
+      <div class="input-group">
+        <label class="label">DISPLAY_NAME</label>
+        <input type="text" placeholder="NEO_ENTITY" required class="input">
+      </div>
+      <div class="input-group">
+        <label class="label">SECURE_EMAIL</label>
+        <input type="email" placeholder="USER@SIGNAL.NET" required class="input">
+      </div>
+      <div class="input-group">
+        <label class="label">ENCRYPTION_KEY</label>
+        <input type="password" placeholder="••••••••" required class="input">
+      </div>
+      <div class="auth-meta">
+        <p class="terms-text">BY INITIALIZING, YOU AGREE TO HUVVSM <a href="#">SYSTEM_PROTOCOLS</a>.</p>
+      </div>
+      <button type="submit" class="btn btn-primary w-full">SIGN_UP</button>
+    </form>
+  </div>
+
+  <!-- ══ PROFILE CARD (logged in) ══ -->
+  <div class="auth-card profile-card" id="profileCard" style="display:none">
+
+    <!-- Identity header -->
+    <div class="auth-header">
+      <p class="cyber-eyebrow">// IDENTITY_VERIFIED</p>
+      <h2 class="auth-title" id="profileName">USER_CORE</h2>
+    </div>
+
+    <!-- Info strip -->
+    <div class="profile-info glass">
+      <div class="info-item">
+        <span class="label">SIGNAL_EMAIL</span>
+        <span class="value" id="profileEmail">...</span>
+      </div>
+      <div class="info-item">
+        <span class="label">SECURITY_LEVEL</span>
+        <span class="value" id="profileRole">...</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs">
+      <button class="profile-tab active" data-ptab="wishlist">♡ WISHLIST</button>
+      <button class="profile-tab" data-ptab="orders">⊞ ORDER_HISTORY</button>
+      <button class="profile-tab" data-ptab="rewards">✦ REWARDS</button>
+      <button class="profile-tab" data-ptab="support" id="supportTabBtn" style="position:relative">🎧 SUPPORT <span class="navbar-dot" id="supportUnreadDot" style="display:none;top:10px;right:10px"></span></button>
+    </div>
+
+    <!-- WISHLIST PANEL -->
+    <div class="profile-tab-panel active" id="panel-wishlist">
+      <div id="wishlistContent">
+        <div class="panel-loading">FETCHING_WISHLIST...</div>
+      </div>
+    </div>
+
+    <!-- ORDERS PANEL -->
+    <div class="profile-tab-panel" id="panel-orders">
+      <div id="ordersContent">
+        <div class="panel-loading">FETCHING_ORDERS...</div>
+      </div>
+    </div>
+
+    <!-- REWARDS PANEL -->
+    <div class="profile-tab-panel" id="panel-rewards">
+      <div id="rewardsContent">
+        <div class="panel-loading">FETCHING_REWARDS_ECOSYSTEM...</div>
+      </div>
+    </div>
+
+    <!-- SUPPORT PANEL -->
+    <div class="profile-tab-panel" id="panel-support">
+      <div id="supportInboxContent">
+        <div class="panel-loading">CONNECTING_SECURE_SIGNAL...</div>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <div class="profile-actions" style="margin-top:24px; display:flex; flex-direction:column; gap:12px">
+      <button class="btn btn-primary w-full" id="adminPanelBtn" style="display:none" onclick="window.location.href='admin.html'">ACCESS_ADMIN_PANEL</button>
+      <button class="btn btn-ghost w-full" id="logoutBtn">LOG_OUT</button>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="navbar-logo" style="margin-bottom:20px;box-shadow:0 0 30px rgba(149,18,44,.3)">
+        <svg viewBox="0 0 120 120" width="28" fill="none" stroke="url(#gfooter)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gfooter" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <h3>HUVVSM</h3>
+      <p>Engineering digital identity through cinematic fashion and futuristic design systems.</p>
+    </div>
+    <div class="footer-col">
+      <h4>SHOP</h4>
+      <a href="shop.html">All Products</a>
+      <a href="lookbook.html">Lookbook</a>
+    </div>
+    <div class="footer-col">
+      <h4>ACCOUNT</h4>
+      <a href="auth.html">Sign In</a>
+      <a href="auth.html">Create Account</a>
+    </div>
+    <div class="footer-col">
+      <h4>LINKS</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="support.html">CONTACT_SUPPORT</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 HUVVSM — ALL RIGHTS RESERVED</span>
+    <span class="label text-muted">SIGNAL SYSTEM V4.8</span>
+  </div>
+</footer>
+
+<!-- REVIEW MODAL -->
+<div class="modal-backdrop" id="reviewModal" data-lenis-prevent>
+  <div class="review-modal-card">
+    <button class="review-modal-close" onclick="closeReviewModal()">×</button>
+    <div class="review-modal-eyebrow">// SIGNAL_FEEDBACK</div>
+    <div class="review-modal-title" id="reviewProductName">PRODUCT_NAME</div>
+
+    <div class="star-picker" id="starPicker"></div>
+
+    <textarea id="reviewComment" placeholder="Describe your experience with this specimen..."></textarea>
+
+    <div id="reviewError"></div>
+
+    <button class="btn btn-primary w-full" id="submitReviewBtn" onclick="submitReview()">TRANSMIT_FEEDBACK</button>
+  </div>
+</div>
+
+<!-- MOTION LIBRARIES -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<!-- CORE SYSTEMS -->
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+
+<!-- PAGE LOGIC -->
+<script src="../js/auth.js"></script>
+
+</body>
+</html>

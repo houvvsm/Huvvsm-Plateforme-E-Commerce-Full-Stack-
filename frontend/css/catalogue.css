@@ -1,0 +1,424 @@
+/* ============================================================ */
+/* HUVVSM — ARCHIVE & CATALOGUE SYSTEM EXTENSION                */
+/* ============================================================ */
+
+/* 01 — PAGE HERO CYBER EXTENSION */
+.page-hero-cyber {
+  padding: 40px var(--gap-sm) 40px;
+  text-align: left;
+  max-width: 800px;
+  position: relative;
+  z-index: 5;
+}
+
+.catalogue-title-large {
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 15vw, 16rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  z-index: 0; 
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: catalogueGlowFade 10s ease-in-out infinite;
+  user-select: none;
+  will-change: opacity, -webkit-text-stroke;
+}
+
+@keyframes catalogueGlowFade {
+  0%, 100% {
+    opacity: 0.15;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+  }
+  50% {
+    opacity: 0.3;
+    -webkit-text-stroke: 1px rgba(90, 243, 255, 0.4);
+  }
+}
+
+.cyber-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: var(--gap-sm);
+  filter: drop-shadow(var(--glow1));
+}
+
+.geo-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: var(--gap-sm);
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtext {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+  max-width: 600px;
+}
+
+/* 02 — ARCHIVE CONTROL PANEL & FILTERING TERMINAL */
+.archive-section {
+  padding: var(--gap-md) 0 var(--gap-xl);
+  position: relative;
+  z-index: 5;
+}
+
+.catalogue-control-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap-md);
+  margin-bottom: var(--gap-lg);
+  flex-wrap: wrap;
+}
+
+/* Neon Query Box */
+.search-terminal-box {
+  position: relative;
+  flex: 1;
+  max-width: 420px;
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+}
+
+.search-terminal-box .search-icon {
+  position: absolute;
+  left: 16px;
+  font-family: var(--font-mono);
+  color: var(--primary);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.search-terminal-box input {
+  width: 100%;
+  padding: 16px 16px 16px 44px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  color: var(--txt);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  outline: none;
+  backdrop-filter: blur(10px);
+  transition: all var(--t-fast) var(--ease);
+}
+
+.search-terminal-box input::placeholder {
+  color: var(--text-3);
+}
+
+.search-terminal-box input:focus {
+  border-color: var(--primary);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: var(--glow1), inset 0 0 10px rgba(90, 243, 255, 0.05);
+}
+
+/* Futuristic Filter Tags */
+.cyber-filter-tags {
+  display: flex;
+  gap: var(--gap-xs);
+  flex-wrap: wrap;
+}
+
+.tag-trigger {
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all var(--t-fast) var(--ease);
+}
+
+.tag-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.tag-trigger.active {
+  background: linear-gradient(135deg, rgba(90, 243, 255, 0.15), rgba(139, 92, 255, 0.1));
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: var(--glow1);
+  text-shadow: 0 0 8px rgba(90, 243, 255, 0.5);
+}
+
+/* 03 — NEON GLASS GRID & SPECIMEN CARDS */
+.neon-glass-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-md);
+}
+
+@media (max-width: 1400px) {
+  .neon-glass-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--gap-md);
+  }
+}
+
+@media (max-width: 1100px) {
+  .neon-glass-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Specimen Card Architecture */
+.specimen-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  transition: transform 0.6s var(--ease), border-color 0.6s var(--ease), box-shadow 0.6s var(--ease);
+  will-change: transform;
+}
+
+.specimen-card-visual {
+  position: relative;
+  height: 340px;
+  overflow: hidden;
+  background: var(--bg-darker);
+}
+
+.specimen-card-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+
+/* Status Badges Embedded inside Visuals */
+.specimen-badge-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+
+/* Dynamic Interactive Overlay Shutter */
+.specimen-shutter {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(5, 6, 10, 0.2) 0%, rgba(5, 6, 10, 0.75) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.4s var(--ease);
+  z-index: 2;
+}
+
+.shutter-actions {
+  display: flex;
+  gap: var(--gap-sm);
+  transform: translateY(20px);
+  transition: transform 0.4s var(--ease);
+}
+
+/* Interactions Triggering Shutter and Image Motion */
+.specimen-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(90, 243, 255, 0.3);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(90, 243, 255, 0.1);
+}
+
+.specimen-card:hover .specimen-card-visual img {
+  transform: scale(1.08);
+}
+
+.specimen-card:hover .specimen-shutter {
+  opacity: 1;
+}
+
+.specimen-card:hover .shutter-actions {
+  transform: translateY(0);
+}
+
+/* Specimen Card Descriptive Frame */
+.specimen-details {
+  padding: 24px;
+  border-top: 1px solid var(--glass-border);
+  background: linear-gradient(180deg, transparent, rgba(1, 2, 6, 0.3));
+}
+
+.specimen-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.specimen-id {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+}
+
+.specimen-title {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* Laser Reflection Line Sweeping across on Card Hover */
+.specimen-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(90, 243, 255, 0.06), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.8s var(--ease);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.specimen-card:hover::before {
+  left: 150%;
+}
+
+/* 04 — DIRECTORY SYSTEM BREADCRUMBS */
+.sys-breadcrumbs {
+  padding: 100px var(--gap-sm) 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+}
+
+.sys-breadcrumbs a {
+  color: var(--text-3);
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease);
+}
+
+.sys-breadcrumbs a:hover {
+  color: var(--primary);
+}
+
+.sys-breadcrumbs .separator {
+  color: rgba(255, 255, 255, 0.05);
+}
+
+.sys-breadcrumbs .current {
+  color: var(--text-muted);
+}
+
+/* 05 — SYSTEM RESPONSIVE CODES */
+@media (max-width: 900px) {
+  .catalogue-control-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--gap-sm);
+  }
+  
+  .search-terminal-box {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-hero-cyber {
+    padding-top: 80px;
+  }
+  
+  .neon-glass-grid {
+    grid-template-columns: 1fr;
+    gap: var(--gap-sm);
+  }
+
+  .specimen-card-visual {
+    height: 360px;
+  }
+}
+.stock-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+ 
+.stock-badge.badge-in-stock {
+  color: #00ff7f;
+  background: rgba(0,255,127,0.1);
+  border: 1px solid rgba(0,255,127,0.3);
+}
+ 
+.stock-badge.badge-low-stock {
+  color: #ffc107;
+  background: rgba(255,193,7,0.12);
+  border: 1px solid rgba(255,193,7,0.35);
+  animation: pulseLowStock 2s ease-in-out infinite;
+}
+ 
+.stock-badge.badge-out-of-stock {
+  color: #ff4d6d;
+  background: rgba(255,77,109,0.12);
+  border: 1px solid rgba(255,77,109,0.35);
+}
+ 
+.specimen-card.is-out-of-stock .specimen-card-visual img {
+  filter: grayscale(0.6) brightness(0.6);
+}
+ 
+.specimen-card.is-out-of-stock .specimen-card-visual::after {
+  content: 'OUT_OF_STOCK';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: #ff4d6d;
+  background: rgba(3,4,11,0.55);
+  z-index: 2;
+  pointer-events: none;
+}

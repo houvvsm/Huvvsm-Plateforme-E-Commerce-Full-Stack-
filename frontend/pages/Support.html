@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUPPORT // HUVVSM</title>
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+  <style>
+    .support-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 20px 80px;
+    }
+    .support-card {
+      width: 100%;
+      max-width: 580px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r-md);
+      padding: 48px 40px;
+      backdrop-filter: blur(var(--glass-blur));
+    }
+    .support-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      color: var(--c2);
+      margin-bottom: 12px;
+    }
+    .support-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .support-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+    .support-form-inner { display: flex; flex-direction: column; gap: 20px; }
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    .input-group .label { font-size: 10px; letter-spacing: 0.14em; color: var(--text-muted); }
+    .input, textarea.input {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      color: var(--text);
+      padding: 13px 16px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .input:focus, textarea.input:focus {
+      border-color: rgba(139,92,255,0.4);
+      box-shadow: 0 0 0 3px rgba(139,92,255,0.06);
+    }
+    textarea.input { min-height: 120px; resize: vertical; }
+    .name-email-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .support-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .support-success-icon { font-size: 48px; margin-bottom: 20px; }
+    .support-success-title {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      color: var(--c1);
+      margin-bottom: 12px;
+    }
+    .support-success-sub { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+    
+    /* Premium Chat Styling */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      background: rgba(0, 0, 0, 0.2);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+    /* Hide scrollbar logic for custom look */
+    .chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 255, 0.2);
+      border-radius: 2px;
+    }
+    .message-bubble {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      word-wrap: break-word;
+      animation: bubbleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      box-sizing: border-box;
+    }
+    .message-bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #8b5cff, #6d46cc);
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+    .message-bubble.model {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-bottom-left-radius: 2px;
+    }
+    @keyframes bubbleIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .chat-input-container {
+      display: flex;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid var(--line);
+      align-items: center;
+    }
+    .chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .chat-send-btn {
+      background: none;
+      border: none;
+      color: var(--c1);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 4px;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .chat-send-btn:hover {
+      color: var(--c2);
+      transform: scale(1.1);
+    }
+    .suggested-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .chip {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .chip:hover {
+      background: rgba(139, 92, 255, 0.1);
+      border-color: rgba(139, 92, 255, 0.3);
+      color: var(--text);
+    }
+    
+    /* Typing Indicator */
+    .typing-indicator {
+      align-self: flex-start;
+      display: none;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+      padding: 12px 18px;
+      border-radius: 12px;
+      border-bottom-left-radius: 2px;
+    }
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    @media (max-width: 600px) {
+      .support-card { padding: 32px 24px; }
+      .name-email-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-page="support">
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress"><div class="loader-bar"></div></div>
+    <div class="loader-status">
+      <span class="glitch-text">INITIALIZING_SUPPORT_CHANNEL</span>
+      <span class="binary-stream">10110100 01101001 11010010</span>
+    </div>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="orb-field">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-bg"></div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM</span>
+  </a>
+  <nav class="navbar-links">
+    <a href="index.html">HOME</a>
+    <a href="shop.html">CATALOGUE</a>
+    <a href="lookbook.html">LOOKBOOK</a>
+  </nav>
+  <div class="navbar-actions">
+    <button class="navbar-icon-btn" data-magnetic onclick="window.location='auth.html'" title="Account">👤</button>
+    <button class="navbar-icon-btn" data-magnetic style="position:relative" onclick="window.location='cart.html'" title="Cart">
+      🛒
+      <span class="navbar-badge" data-cart-count style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <button class="navbar-icon-btn" data-magnetic id="mobileMenuBtn">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav-drawer" id="mobileDrawer">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close">×</button>
+    <nav class="mobile-nav-links">
+      <a href="index.html">HOME</a>
+      <a href="shop.html">CATALOGUE</a>
+      <a href="lookbook.html">LOOKBOOK</a>
+      <a href="cart.html">CART</a>
+      <a href="auth.html">ACCOUNT</a>
+      <a href="support.html">SUPPORT</a>
+    </nav>
+  </div>
+</div>
+
+<main class="support-container">
+  <div class="support-card" data-reveal>
+
+    <!-- SUPPORT WRAPPER -->
+    <div id="supportFormWrap">
+      
+      <!-- AI CHAT VIEW -->
+      <div id="aiChatView">
+        <div class="support-eyebrow">// HUVVSM_ASSISTANT</div>
+        <h1 class="support-title">AI SUPPORT<br><span class="gradient-text">CENTER.</span></h1>
+        <p class="support-sub">
+          Connect directly with the HUVVSM intelligence network for inquiries regarding orders, refunds, sizing or rewards.
+        </p>
+
+        <!-- Category cards (Shown initially) -->
+        <div class="category-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <div class="category-card" onclick="selectCategory('shopping')" id="card-shopping" style="padding: 20px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: all 0.3s var(--ease); text-align: center; background: rgba(255,255,255,0.02)">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">🛍</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; font-weight: 700; color: #fff;">SHOPPING_ASSISTANT</div>
+          </div>
+          <div class="category-card" onclick="selectCategory('orders')" id="card-orders" style="padding: 20px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: all 0.3s var(--ease); text-align: center; background: rgba(255,255,255,0.02)">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">📦</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; font-weight: 700; color: #fff;">ORDERS_DELIVERY</div>
+          </div>
+          <div class="category-card" onclick="selectCategory('rewards')" id="card-rewards" style="padding: 20px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: all 0.3s var(--ease); text-align: center; background: rgba(255,255,255,0.02)">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">🎁</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; font-weight: 700; color: #fff;">REWARDS_ACCOUNT</div>
+          </div>
+          <div class="category-card" onclick="selectCategory('support')" id="card-support" style="padding: 20px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: all 0.3s var(--ease); text-align: center; background: rgba(255,255,255,0.02)">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">💬</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; font-weight: 700; color: #fff;">SUPPORT_HUVVSM</div>
+          </div>
+        </div>
+
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message-bubble model" id="welcomeMsg">
+              Greetings entity. Select a category card above or transmit a custom query to query the HUVVSM intelligence network.
+            </div>
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Transmit query to AI..." onkeydown="handleChatKeydown(event)">
+            <span class="too-complex-link" onclick="showEscalateForm()" style="font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); cursor: pointer; white-space: nowrap; margin-right: 8px; transition: color 0.2s; border-bottom: 1px dashed rgba(255,255,255,0.15)" onmouseover="this.style.color='var(--c2)'" onmouseout="this.style.color='var(--text-muted)'">Too complex?</span>
+            <button class="chat-send-btn" onclick="sendChatMessage()">✦</button>
+          </div>
+        </div>
+
+        <!-- Suggested chips dynamically rendered -->
+        <div class="suggested-chips" id="suggestedChips" style="margin-top: 15px; min-height: 45px; display: flex; flex-wrap: wrap; gap: 8px;">
+          <!-- Prefilled chips -->
+        </div>
+
+        <button class="btn btn-ghost w-full" onclick="showEscalateForm()" style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;margin-top:10px">
+          // SIGNAL_HUMAN_OPERATOR
+        </button>
+      </div>
+
+      <!-- HUMAN ESCALATION PROBLEM SELECTOR -->
+      <div id="escalateView" style="display: none;">
+        <div class="support-eyebrow">// HUMAN_ESCALATION_SIGNAL</div>
+        <h1 class="support-title">TALK TO<br><span class="gradient-text">HUMAN.</span></h1>
+        <p class="support-sub" style="margin-bottom: 24px;">
+          Please select the category of problem you are experiencing. You will be redirected to the secure Support Inbox to create a ticket.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <button class="btn btn-ghost w-full" onclick="escalateToInbox('ORDER_PROBLEM')" style="text-align: left; padding: 16px 20px; font-family: var(--font-mono); letter-spacing: 0.1em; border-color: rgba(255,255,255,0.08)">
+            ◈ ORDER_PROBLEM
+          </button>
+          <button class="btn btn-ghost w-full" onclick="escalateToInbox('PAYMENT_PROBLEM')" style="text-align: left; padding: 16px 20px; font-family: var(--font-mono); letter-spacing: 0.1em; border-color: rgba(255,255,255,0.08)">
+            ◈ PAYMENT_PROBLEM
+          </button>
+          <button class="btn btn-ghost w-full" onclick="escalateToInbox('PRODUCT_ISSUE')" style="text-align: left; padding: 16px 20px; font-family: var(--font-mono); letter-spacing: 0.1em; border-color: rgba(255,255,255,0.08)">
+            ◈ PRODUCT_ISSUE
+          </button>
+          <button class="btn btn-ghost w-full" onclick="escalateToInbox('RETURN_EXCHANGE')" style="text-align: left; padding: 16px 20px; font-family: var(--font-mono); letter-spacing: 0.1em; border-color: rgba(255,255,255,0.08)">
+            ◈ RETURN_EXCHANGE
+          </button>
+          <button class="btn btn-ghost w-full" onclick="escalateToInbox('ACCOUNT_ISSUE')" style="text-align: left; padding: 16px 20px; font-family: var(--font-mono); letter-spacing: 0.1em; border-color: rgba(255,255,255,0.08)">
+            ◈ ACCOUNT_ISSUE
+          </button>
+          <button class="btn btn-ghost w-full" onclick="escalateToInbox('OTHER')" style="text-align: left; padding: 16px 20px; font-family: var(--font-mono); letter-spacing: 0.1em; border-color: rgba(255,255,255,0.08)">
+            ◈ OTHER
+          </button>
+          
+          <button class="btn btn-primary btn-lg w-full" onclick="hideEscalateForm()" style="margin-top: 15px;">
+            RETURN_TO_CHAT
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="support-success" id="supportSuccess">
+      <div class="support-success-icon">📡</div>
+      <div class="support-success-title">SIGNAL_RECEIVED</div>
+      <p class="support-success-sub">
+        Your message has been transmitted successfully.<br>
+        Our support team will review your case and contact you as soon as possible.
+      </p>
+      <a href="index.html" class="btn btn-primary" style="display:inline-block;margin-top:28px">RETURN_HOME</a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <span>© 2026 HUVVSM — ALL RIGHTS RESERVED</span>
+    <span class="label text-muted">SIGNAL SYSTEM V4.8</span>
+  </div>
+</footer>
+
+<!-- MOTION LIBRARIES -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<!-- CORE SYSTEMS -->
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+
+<!-- PAGE LOGIC -->
+<script>
+let chatHistory = [];
+let currentCategory = '';
+
+const suggestedChipsData = {
+  shopping: [
+    "Recommend complete outfits",
+    "Compare products",
+    "Explain care instructions",
+    "Search products by category",
+    "What material fits best?"
+  ],
+  orders: [
+    "Where is my order?",
+    "What is my latest order status?",
+    "Can I cancel my order?",
+    "Check return policy",
+    "Estimate delivery date"
+  ],
+  rewards: [
+    "Check my loyalty points",
+    "What are my unredeemed coupons?",
+    "View my wishlist",
+    "Rewards threshold limits"
+  ],
+  support: [
+    "HUVVSM Brand story",
+    "Mission & Vision statement",
+    "General store FAQ",
+    "Talk to human agent"
+  ]
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Select shopping category by default on load
+  selectCategory('shopping');
+  
+  if (Auth.isLoggedIn()) {
+    const user = Auth.getUser();
+    document.getElementById('welcomeMsg').textContent = `Welcome back, ${user.name}. I am the HUVVSM Commerce Assistant. Select a category or submit queries regarding your orders, points, or inventory.`;
+  }
+});
+
+// Category selection
+function selectCategory(cat) {
+  currentCategory = cat;
+  
+  // Update category card active borders
+  document.querySelectorAll('.category-card').forEach(el => {
+    el.style.borderColor = 'var(--line)';
+    el.style.background = 'rgba(255,255,255,0.02)';
+  });
+  
+  const activeCard = document.getElementById(`card-${cat}`);
+  if (activeCard) {
+    activeCard.style.borderColor = 'var(--c1)';
+    activeCard.style.background = 'rgba(0, 229, 255, 0.05)';
+  }
+  
+  // Render sub-chips
+  const chipsContainer = document.getElementById('suggestedChips');
+  chipsContainer.innerHTML = '';
+  
+  const chips = suggestedChipsData[cat] || [];
+  chips.forEach(text => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = text;
+    chip.onclick = () => sendSuggested(text);
+    chipsContainer.appendChild(chip);
+  });
+}
+
+// Show/Hide escalation form smoothly
+function showEscalateForm() {
+  const aiChatView = document.getElementById('aiChatView');
+  const escalateView = document.getElementById('escalateView');
+
+  if (typeof gsap !== 'undefined') {
+    gsap.to(aiChatView, { opacity: 0, duration: 0.3, onComplete: () => {
+      aiChatView.style.display = 'none';
+      escalateView.style.display = 'block';
+      gsap.fromTo(escalateView, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4 });
+    }});
+  } else {
+    aiChatView.style.display = 'none';
+    escalateView.style.display = 'block';
+  }
+}
+
+function hideEscalateForm() {
+  const aiChatView = document.getElementById('aiChatView');
+  const escalateView = document.getElementById('escalateView');
+
+  if (typeof gsap !== 'undefined') {
+    gsap.to(escalateView, { opacity: 0, duration: 0.3, onComplete: () => {
+      escalateView.style.display = 'none';
+      aiChatView.style.display = 'block';
+      gsap.fromTo(aiChatView, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4 });
+    }});
+  } else {
+    escalateView.style.display = 'none';
+    aiChatView.style.display = 'block';
+  }
+}
+
+// Escalate to customer inbox with preset category details
+function escalateToInbox(category) {
+  // Store initial comment text constructed from chat history
+  let logText = "";
+  if (chatHistory.length > 0) {
+    logText = chatHistory.map(ch => `${ch.role.toUpperCase()}: ${ch.message}`).join('\n');
+  } else {
+    logText = "User requested direct human agent support.";
+  }
+  
+  localStorage.setItem('pending_ticket_category', category);
+  localStorage.setItem('pending_ticket_log', logText);
+
+  if (Auth.isLoggedIn()) {
+    window.location.href = `auth.html?tab=support&action=new-ticket&category=${category}`;
+  } else {
+    Toast.info('Identity verification required. Log in to access support channels.');
+    setTimeout(() => {
+      window.location.href = 'auth.html?redirect=support';
+    }, 1500);
+  }
+}
+
+// Send user message to AI
+async function sendChatMessage(text = null) {
+  const input = document.getElementById('chatInput');
+  const msgText = text || input.value.trim();
+  if (!msgText) return;
+
+  if (!text) {
+    input.value = '';
+  }
+
+  appendMessage(msgText, 'user');
+
+  // Show typing indicator
+  const indicator = document.getElementById('typingIndicator');
+  indicator.style.display = 'flex';
+  scrollChatToBottom();
+
+  try {
+    // If logged in, fetch from personalized chat router path. Otherwise standard chat router path.
+    const path = Auth.isLoggedIn() ? '/support/customer-chat' : '/support/chat';
+    const response = await fetch(`${API.BASE}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': Auth.isLoggedIn() ? `Bearer ${Auth.getToken()}` : ''
+      },
+      body: JSON.stringify({ message: msgText, history: chatHistory })
+    });
+    
+    const data = await response.json();
+    indicator.style.display = 'none';
+
+    if (data.success && data.data) {
+      const aiResponse = data.data.response;
+      const shouldEscalate = data.data.escalate;
+
+      appendMessage(aiResponse, 'model');
+      
+      // Update chat history
+      chatHistory.push({ role: 'user', message: msgText });
+      chatHistory.push({ role: 'model', message: aiResponse });
+      if (chatHistory.length > 20) chatHistory.shift();
+
+      if (shouldEscalate) {
+        setTimeout(() => {
+          showEscalateForm();
+        }, 1500);
+      }
+    } else {
+      appendMessage(data.error || 'Connection signal lost. Please retry.', 'model');
+    }
+  } catch (err) {
+    indicator.style.display = 'none';
+    appendMessage('Unable to transmit message. Check network signal.', 'model');
+    console.error('Chat error:', err);
+  }
+
+  scrollChatToBottom();
+}
+
+function handleChatKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendChatMessage();
+  }
+}
+
+function sendSuggested(text) {
+  if (text === "Talk to human agent") {
+    showEscalateForm();
+  } else {
+    sendChatMessage(text);
+  }
+}
+
+function appendMessage(text, sender) {
+  const messagesDiv = document.getElementById('chatMessages');
+  const bubble = document.createElement('div');
+  bubble.className = `message-bubble ${sender}`;
+  
+  if (sender === 'model') {
+    bubble.innerHTML = formatMessage(text);
+  } else {
+    bubble.textContent = text;
+  }
+  
+  // Insert before the typing indicator
+  const indicator = document.getElementById('typingIndicator');
+  messagesDiv.insertBefore(bubble, indicator);
+  scrollChatToBottom();
+}
+
+function scrollChatToBottom() {
+  const messagesDiv = document.getElementById('chatMessages');
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+</script>
+
+</body>
+</html>

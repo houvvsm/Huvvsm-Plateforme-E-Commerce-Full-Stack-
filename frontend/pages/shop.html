@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARCHIVE // HUVVSM DIGITAL FASHION</title>
+  
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/catalogue.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+</head>
+<body data-page="catalogue">
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress">
+      <div class="loader-bar"></div>
+    </div>
+    <div class="loader-status">
+      <span class="glitch-text">RECALLING_ARCHIVE</span>
+      <span class="binary-stream">11001010 00110111 01011001</span>
+    </div>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="orb-field">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-bg"></div>
+
+<!-- LARGE BACKGROUND TITLE -->
+<div class="catalogue-title-large">CATALOGUE</div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM</span>
+  </a>
+  <nav class="navbar-links">
+    <a href="index.html">HOME</a>
+    <a href="shop.html" class="active">CATALOGUE</a>
+    <a href="lookbook.html">LOOKBOOK</a>
+  </nav>
+  <div class="navbar-actions">
+    <button class="navbar-icon-btn" data-magnetic onclick="window.location='auth.html'" title="Account">👤</button>
+    <button class="navbar-icon-btn" data-magnetic style="position:relative" onclick="window.location='cart.html'" title="Cart">
+      🛒
+      <span class="navbar-badge" data-cart-count style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <button class="navbar-icon-btn" data-magnetic id="mobileMenuBtn">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav-drawer" id="mobileDrawer">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close">×</button>
+    <nav class="mobile-nav-links">
+      <a href="index.html">HOME</a>
+      <a href="shop.html">CATALOGUE</a>
+      <a href="lookbook.html">LOOKBOOK</a>
+      <a href="cart.html">CART</a>
+      <a href="dashboard.html">DASHBOARD</a>
+      <a href="auth.html">ACCOUNT</a>
+    </nav>
+  </div>
+</div>
+
+<main class="container">
+  <div class="big-logo section-parallax">
+    <section class="page-hero-cyber" data-reveal>
+      <p class="cyber-eyebrow">// DIGITAL WEARABLE ARCHIVE</p>
+    <h1 class="geo-title" data-reveal data-reveal-delay="2">HUVVSM CATALOGUE</h1>
+      <p class="hero-subtext">Immersive digital apparel engineered with high-contrast optics, generative 3D textures, and responsive mesh technology.</p>
+    </section>
+  </div>
+
+  <section class="archive-section" aria-label="Collection Grid">
+    <div class="catalogue-control-panel" data-reveal>
+      <div class="search-terminal-box">
+        <span class="search-icon">⌥</span>
+        <input type="text" placeholder="QUERY SPECIMEN_ID..." aria-label="Search Catalogue">
+        <div class="input-glow-border"></div>
+      </div>
+      
+      <div class="cyber-filter-tags">
+        <button class="tag-trigger active" data-filter="all">ALL_UNITS</button>
+        <button class="tag-trigger" data-filter="huvvsm">Huvvsm</button>
+        <button class="tag-trigger" data-filter="anime">Anime</button>
+        <button class="tag-trigger" data-filter="motorsports">motorsports</button>
+      </div>
+    </div>
+
+    <div class="neon-glass-grid" id="catalogueGrid" data-reveal>
+      <!-- Dynamic content injected via shop.js -->
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="navbar-logo" style="margin-bottom:20px;box-shadow:0 0 30px rgba(149,18,44,.3)">
+        <svg viewBox="0 0 120 120" width="28" fill="none" stroke="url(#gfooter)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gfooter" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <h3>HUVVSM</h3>
+      <p>Engineering digital identity through cinematic fashion and futuristic design systems.</p>
+    </div>
+    <div class="footer-col">
+      <h4>SHOP</h4>
+      <a href="shop.html">All Products</a>
+      <a href="lookbook.html">Lookbook</a>
+    </div>
+    <div class="footer-col">
+      <h4>ACCOUNT</h4>
+      <a href="auth.html">Sign In</a>
+      <a href="auth.html">Create Account</a>
+    </div>
+    <div class="footer-col">
+      <h4>LINKS</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 HUVVSM — ALL RIGHTS RESERVED</span>
+    <span class="label text-muted">SIGNAL SYSTEM V4.8</span>
+  </div>
+</footer>
+
+<!-- MOTION LIBRARIES -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<!-- CORE SYSTEMS -->
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+
+<!-- PAGE LOGIC -->
+<script src="../js/shop.js"></script>
+
+</body>
+</html>

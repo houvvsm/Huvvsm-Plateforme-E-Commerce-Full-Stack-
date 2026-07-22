@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOOKBOOK 2026 — HUVVSM</title>
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/lookbook.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+</head>
+<body class="lookbook-page">
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress"><div class="loader-bar"></div></div>
+    <div class="loader-status">
+      <span class="glitch-text">INITIALIZING NEURAL_LINK</span>
+      <span class="binary-stream">01011101 11010101 10101011</span>
+    </div>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="orb-field">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-bg"></div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM</span>
+  </a>
+  <nav class="navbar-links">
+    <a href="index.html">HOME</a>
+    <a href="shop.html">CATALOGUE</a>
+    <a href="lookbook.html" class="active">LOOKBOOK</a>
+  </nav>
+  <div class="navbar-actions">
+    <button class="navbar-icon-btn" data-magnetic onclick="window.location='auth.html'" title="Account">👤</button>
+    <button class="navbar-icon-btn" data-magnetic style="position:relative" onclick="window.location='cart.html'" title="Cart">
+      🛒
+      <span class="navbar-badge" data-cart-count style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <button class="navbar-icon-btn" data-magnetic id="mobileMenuBtn">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav-drawer" id="mobileDrawer">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close">×</button>
+    <nav class="mobile-nav-links">
+      <a href="index.html">HOME</a>
+      <a href="shop.html">CATALOGUE</a>
+      <a href="lookbook.html">LOOKBOOK</a>
+      <a href="cart.html">CART</a>
+      <a href="auth.html">ACCOUNT</a>
+    </nav>
+    <div style="margin-top:auto;padding-top:40px;border-top:1px solid var(--line)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#00ff78;box-shadow:0 0 10px #00ff78"></div>
+        <span class="label text-muted">SIGNAL_04 LIVE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="lookbook-main">
+
+  <!-- ── SECTION 1: HERO ── -->
+  <section class="hero-section">
+    <div class="hero-bg-glow"></div>
+    
+ 
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">LOOKBOOK 2026</div>
+      <h1 class="hero-title">
+        <span class="line"><span class="line-inner">HUVVSM</span></span>
+        <span class="line"><span class="line-inner gradient-word">LOOKBOOK</span></span>
+      </h1>
+      <div class="hero-meta">
+        <span class="hero-meta-item">SS_2026</span>
+        <div class="hero-meta-dot"></div>
+        <span class="hero-meta-item">HUVVSM SIGNAL ARCHIVES</span>
+        <div class="hero-meta-dot"></div>
+        <span class="hero-meta-item">COLLECTION_04</span>
+      </div>
+    </div>
+  
+  </section>
+
+  <!-- ── TICKER ── -->
+  <div class="ticker-band">
+    <div class="ticker-track">
+      <span class="ticker-item">HUVVSM SS2026</span>
+      <span class="ticker-item">NOT FOR EVERYONE</span>
+      <span class="ticker-item">SIGNAL_04 COLLECTION</span>
+      <span class="ticker-item">ENGINEERING IDENTITY</span>
+      <span class="ticker-item">DIGITAL PRESENCE</span>
+      <span class="ticker-item">CINEMATIC FASHION</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="ticker-item">HUVVSM SS2026</span>
+      <span class="ticker-item">NOT FOR EVERYONE</span>
+      <span class="ticker-item">SIGNAL_04 COLLECTION</span>
+      <span class="ticker-item">ENGINEERING IDENTITY</span>
+      <span class="ticker-item">DIGITAL PRESENCE</span>
+      <span class="ticker-item">CINEMATIC FASHION</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: MANIFESTO ── -->
+  <section class="manifesto-section section-padding">
+    <div class="container">
+      <h2 class="display-2 manifesto-title" data-gsap="reveal-text">
+        "Identity is not worn.<br>Identity is projected."
+      </h2>
+      <div class="manifesto-body" data-gsap="fade-up">
+        <p class="body-lg">
+          In the intersection of high-performance technical wear and digital expression, HUVVSM exists as a signal in the void. We don't just dress the body — we augment the presence. Every stitch is a line of code, every silhouette a statement of intent.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3: EDITORIAL STORIES (dynamic) ── -->
+  <section class="editorial-stories" id="dynamic-stories">
+    <!-- Dynamically populated by lookbook.js -->
+  </section>
+
+  <!-- ── STATS BAND ── -->
+  <section class="stats-band">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" data-count="2026">2026</span>
+          <span class="stat-label">FOUNDING_YEAR</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="04">04</span>
+          <span class="stat-label">COLLECTIONS</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="100">100%</span>
+          <span class="stat-label">SIGNAL_PURITY</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="∞">∞</span>
+          <span class="stat-label">IDENTITY_SIGNALS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: GALLERY (dynamic) ── -->
+  <section class="gallery-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="label">VISUAL_ARCHIVE</div>
+        <h2 class="display-3">MOMENTS_IN_TIME</h2>
+      </div>
+      <div class="masonry-gallery" id="dynamic-gallery">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5: FEATURED COLLECTION ── -->
+  <section class="featured-collection">
+    <div class="container">
+      <div class="collection-hero">
+        <div class="collection-logo">
+          <svg viewBox="0 0 120 120" fill="none" stroke="url(#gfeatured)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <defs><linearGradient id="gfeatured" x1="0" x2="1"><stop offset="0" stop-color="#5af3ff"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+            <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+          </svg>
+        </div>
+        <h2 class="display-2">CURRENT COLLECTION</h2>
+        <a href="shop.html" class="btn btn-primary btn-lg">EXPLORE COLLECTION</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5.5: ABOUT US ── -->
+  <section class="about-section section-padding" id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- LEFT: NARRATIVE -->
+        <div class="about-narrative" data-gsap="fade-up">
+          <div class="label" style="color:var(--c1);margin-bottom:16px">// ORIGIN_SIGNAL</div>
+          <h2 class="display-3" style="margin-bottom:28px">ABOUT<br><span class="gradient-text">HUVVSM.</span></h2>
+          <p class="body-lg" style="color:var(--text-muted);margin-bottom:20px">
+            HUVVSM was founded on a single belief: clothing is the original interface between
+            self and signal. We design at the intersection of streetwear and digital culture —
+            garments built for people who live as much online as they do in the physical world.
+          </p>
+          <p class="body-lg" style="color:var(--text-muted)">
+            Every piece is engineered in small batches, with technical fabrics and construction
+            details inspired by Y2K cyber-aesthetics and contemporary Moroccan craftsmanship.
+            Not for everyone. Built for the signal.
+          </p>
+
+          <div class="about-cta-row">
+            <a href="shop.html" class="btn btn-primary">EXPLORE_COLLECTION</a>
+            <a href="support.html" class="btn btn-ghost">CONTACT_US</a>
+          </div>
+        </div>
+
+        <!-- RIGHT: VALUE CARDS -->
+        <div class="about-values" data-gsap="fade-up">
+          <div class="value-card">
+            <div class="value-icon">⚡</div>
+            <h4>SMALL_BATCH_PRODUCTION</h4>
+            <p>Limited drops, zero overproduction. Every unit is intentional.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🧵</div>
+            <h4>TECHNICAL_MATERIALS</h4>
+            <p>Heavyweight cotton blends and reactive synthetics built to last.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🌍</div>
+            <h4>MADE_IN_MOROCCO</h4>
+            <p>Designed and produced locally, shipped globally.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">📡</div>
+            <h4>DIRECT_SUPPORT</h4>
+            <p>Questions about an order? Our team responds within 24–48h.
+              <a href="support.html" class="value-link">CONTACT_SUPPORT →</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 6: QUOTE ── -->
+  <section class="quote-section">
+    <div class="container">
+      <div class="quote-wrap">
+        <h2 class="display-2 quote-text" data-gsap="reveal-text">
+          "We do not create clothing.<br>We engineer presence."
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 7: FINAL CTA ── -->
+  <section class="final-cta section-padding">
+    <div class="final-cta-inner">
+      <div class="final-logo">
+        <svg viewBox="0 0 120 120" fill="none" stroke="url(#gfinal)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gfinal" x1="0" x2="1"><stop offset="0" stop-color="#5af3ff"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <h2>BECOME<br><span class="gradient-text">THE SIGNAL</span></h2>
+      <a href="shop.html" class="btn btn-primary btn-lg">SHOP COLLECTION</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="navbar-logo" style="margin-bottom:20px;box-shadow:0 0 30px rgba(90,243,255,.2)">
+        <svg viewBox="0 0 120 120" width="28" fill="none" stroke="url(#gfooter)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gfooter" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <h3>HUVVSM</h3>
+      <p>Engineering digital identity through cinematic fashion.</p>
+    </div>
+    <div class="footer-col">
+      <h4>SHOP</h4>
+      <a href="shop.html">All Products</a>
+      <a href="lookbook.html">Lookbook</a>
+    </div>
+    <div class="footer-col">
+      <h4>COMPANY</h4>
+      <a href="lookbook.html#about">About Us</a>
+      <a href="support.html">Contact Support</a>
+    </div>
+    <div class="footer-col">
+      <h4>ACCOUNT</h4>
+      <a href="auth.html">Sign In</a>
+      <a href="auth.html">Create Account</a>
+    </div>
+    <div class="footer-col">
+      <h4>LINKS</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="support.html">CONTACT_SUPPORT</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 HUVVSM — ALL RIGHTS RESERVED</span>
+    <span class="label text-muted">SIGNAL SYSTEM V4.8</span>
+  </div>
+</footer>
+
+<!-- GALLERY MODAL -->
+<div id="galleryModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="gallery-modal">
+    <button class="modal-close" onclick="closeGalleryModal()">×</button>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="">
+      <div class="modal-info">
+        <div class="label" id="modalLabel">COLLECTION_ARCHIVE</div>
+        <h3 id="modalTitle">SIGNAL_ANALYSIS</h3>
+        <p id="modalDesc">A captured moment of technical expression and architectural silhouette from the 2026 Lookbook.</p>
+        <div class="modal-cta">
+          <a href="shop.html" class="btn btn-primary" style="font-size:11px;padding:12px 24px;">SHOP COLLECTION</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+<script src="../js/lookbook.js"></script>
+</body>
+</html>

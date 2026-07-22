@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMMAND_CENTER // HUVVSM ADMIN</title>
+  
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+</head>
+<body data-page="admin">
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress"><div class="loader-bar"></div></div>
+    <div class="loader-status">
+      <span class="glitch-text">AUTHORIZING_ADMIN_LEVEL</span>
+    </div>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="orb-field">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-bg"></div>
+
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM_CORE</span>
+  </a>
+  <div class="navbar-actions">
+    <button class="btn btn-ghost btn-sm" onclick="Auth.logout()" style="border-radius:32px">TERMINATE_SESSION</button>
+  </div>
+</header>
+
+<div class="admin-wrapper">
+  <!-- TOP HUD -->
+ 
+
+  <main class="dashboard-main">
+    <!-- SIDEBAR NAV -->
+    <aside class="admin-nav">
+      <!-- COMMAND_CENTER is now the first tab and the default on login -->
+      <button class="nav-item active" data-tab="command" onclick="loadTab('command')">
+        <span class="icon">◈</span> COMMAND_CENTER
+      </button>
+      <button class="nav-item" data-tab="products" onclick="loadTab('products')">
+        <span class="icon">📦</span> INVENTORY_CONTROL
+      </button>
+      <button class="nav-item" data-tab="users" onclick="loadTab('users')">
+        <span class="icon">👤</span> ENTITY_LOGS
+      </button>
+      <button class="nav-item" data-tab="orders" onclick="loadTab('orders')">
+        <span class="icon">📡</span> SIGNAL_HISTORY
+      </button>
+      <button class="nav-item" data-tab="feedback" onclick="loadTab('feedback')">
+        <span class="icon">★</span> FEEDBACK_LOGS
+      </button>
+      <button class="nav-item" data-tab="support" onclick="loadTab('support')" style="position:relative">
+        <span class="icon">🎧</span> SUPPORT_CENTER
+        <span class="navbar-dot" id="adminSupportUnreadDot" style="display:none;top:10px;right:10px;background:#ff4d6d"></span>
+      </button>
+      <button class="nav-item" data-tab="ai" onclick="loadTab('ai')">
+        <span class="icon">✦</span> AI_ASSISTANT
+      </button>
+      <button class="nav-item owner-only" data-tab="staff" onclick="loadTab('staff')" hidden>
+        <span class="icon">🛡</span> STAFF_MANAGEMENT
+      </button>
+      <button class="nav-item" data-tab="rewards" onclick="loadTab('rewards')">
+        <span class="icon">✦</span> REWARDS_MGMT
+      </button>
+      <button class="nav-item" data-tab="settings" onclick="loadTab('settings')">
+        <span class="icon">⚙️</span> SYSTEM_PARAMS
+      </button>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <section id="admin-content" class="content-area">
+      <!-- Injected via admin.js -->
+    </section>
+  </main>
+</div>
+
+<!-- DATA ENTRY MODAL (LUXURY VERSION) -->
+<div id="productModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card">
+    <button class="modal-close" onclick="closeProductModal()" style="top:30px;right:30px">✕</button>
+    
+    <div class="modal-grid-layout">
+      <!-- VISUAL SIDE (MULTI-PIC) -->
+      <div class="modal-visual-side">
+        <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:15px;height:100%;width:100%">
+          <!-- IMAGE 1 -->
+          <div class="upload-zone" onclick="document.getElementById('prodImage1').click()">
+            <input type="file" id="prodImage1" accept="image/*" style="display:none">
+            <div id="preview1" style="width:100%;height:100%;display:none;border-radius:12px;overflow:hidden">
+               <img src="" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div id="placeholder1">
+              <span style="font-size:1.2rem;display:block;color:var(--accent-blue)">VIEW_01</span>
+              <p id="fileName1" style="color:var(--accent-blue);margin-top:8px;font-family:'Space Mono';font-size:0.5rem"></p>
+            </div>
+          </div>
+          <!-- IMAGE 2 -->
+          <div class="upload-zone" onclick="document.getElementById('prodImage2').click()">
+            <input type="file" id="prodImage2" accept="image/*" style="display:none">
+            <div id="preview2" style="width:100%;height:100%;display:none;border-radius:12px;overflow:hidden">
+               <img src="" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div id="placeholder2">
+              <span style="font-size:1.2rem;display:block;color:var(--accent-purple)">VIEW_02</span>
+              <p id="fileName2" style="color:var(--accent-purple);margin-top:8px;font-family:'Space Mono';font-size:0.5rem"></p>
+            </div>
+          </div>
+          <!-- IMAGE 3 -->
+          <div class="upload-zone" onclick="document.getElementById('prodImage3').click()">
+            <input type="file" id="prodImage3" accept="image/*" style="display:none">
+            <div id="preview3" style="width:100%;height:100%;display:none;border-radius:12px;overflow:hidden">
+               <img src="" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div id="placeholder3">
+              <span style="font-size:1.2rem;display:block;color:var(--c1)">VIEW_03</span>
+              <p id="fileName3" style="color:var(--c1);margin-top:8px;font-family:'Space Mono';font-size:0.5rem"></p>
+            </div>
+          </div>
+          <!-- IMAGE 4 -->
+          <div class="upload-zone" onclick="document.getElementById('prodImage4').click()">
+            <input type="file" id="prodImage4" accept="image/*" style="display:none">
+            <div id="preview4" style="width:100%;height:100%;display:none;border-radius:12px;overflow:hidden">
+               <img src="" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div id="placeholder4">
+              <span style="font-size:1.2rem;display:block;color:var(--c2)">VIEW_04</span>
+              <p id="fileName4" style="color:var(--c2);margin-top:8px;font-family:'Space Mono';font-size:0.5rem"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM SIDE -->
+      <div class="modal-form-side">
+        <div class="modal-header-inline">
+          <h2 id="modalTitle" style="font-family:'Orbitron';letter-spacing:2px;font-size:1.8rem;margin-top:10px">ADD PRODUCT</h2>
+        </div>
+
+        <form id="productForm">
+          <input type="hidden" id="prodId">
+          
+          <div class="field-group" style="margin-bottom:24px">
+            <label>SPECIMEN_IDENTIFIER</label>
+            <input type="text" id="prodName" class="input-luxury" placeholder="e.g. VOID SIGNAL HOODIE" required>
+          </div>
+
+          <div class="form-row" style="margin-bottom:24px">
+            <div class="field-group">
+              <label>VALUATION (DH)</label>
+              <input type="number" id="prodPrice" class="input-luxury" placeholder="0.00" required>
+            </div>
+            <div class="field-group">
+              <label>STOCK_UNITS</label>
+              <input type="number" id="prodStock" class="input-luxury" placeholder="0" required>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-bottom:24px">
+            <label>CLASSIFICATION</label>
+            <select id="prodCategory" class="input-luxury">
+              <option value="huvvsm">Huvvsm</option>
+              <option value="anime">Anime</option>
+              <option value="motorsports">motorsports</option>
+            </select>
+          </div>
+
+          <div class="field-group" style="margin-bottom:32px">
+            <label>TECHNICAL_SPECIFICATIONS</label>
+            <textarea id="prodDesc" class="input-luxury" style="min-height:120px;resize:none" placeholder="Enter mesh details, material composition..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full btn-lg" style="height:70px;border-radius:16px;font-size:1rem">COMMIT_TO_CORE</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF (ADMIN) MODAL — OWNER only, reuses the same modal system -->
+<div id="staffModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card" style="width:520px">
+    <button class="modal-close" onclick="closeStaffModal()" style="top:30px;right:30px">✕</button>
+    <div style="padding:40px">
+      <h2 id="staffModalTitle" style="font-family:'Orbitron';letter-spacing:2px;font-size:1.8rem;margin-top:10px;margin-bottom:28px">ADD ADMIN</h2>
+
+      <form id="staffForm">
+        <input type="hidden" id="staffId">
+
+        <div class="field-group" style="margin-bottom:24px">
+          <label>FULL_NAME</label>
+          <input type="text" id="staffName" class="input-luxury" placeholder="e.g. Yasmine Alaoui" required>
+        </div>
+
+        <div class="field-group" style="margin-bottom:24px">
+          <label>EMAIL</label>
+          <input type="email" id="staffEmail" class="input-luxury" placeholder="admin@huvvsm.com" required>
+        </div>
+
+        <div class="field-group" id="staffPasswordGroup" style="margin-bottom:32px">
+          <label>PASSWORD</label>
+          <input type="password" id="staffPassword" class="input-luxury" placeholder="Minimum 8 characters">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full btn-lg" style="height:60px;border-radius:16px;font-size:1rem">COMMIT_TO_CORE</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM SUSPEND MODAL -->
+<div id="confirmSuspendModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card confirm-modal">
+    <div class="confirm-modal-inner">
+      <div class="confirm-icon confirm-icon-danger">⏸</div>
+      <h3 class="confirm-title">SUSPEND_ADMIN</h3>
+      <p class="confirm-body">This administrator will immediately lose access to the platform.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost btn-sm" onclick="Modal.close('confirmSuspendModal')">Cancel</button>
+        <button class="btn btn-sm confirm-btn-danger" id="confirmSuspendBtn">Suspend</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM REACTIVATE MODAL -->
+<div id="confirmActivateModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card confirm-modal">
+    <div class="confirm-modal-inner">
+      <div class="confirm-icon confirm-icon-success">▶</div>
+      <h3 class="confirm-title">REACTIVATE_ADMIN</h3>
+      <p class="confirm-body">This administrator will regain access to the platform.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost btn-sm" onclick="Modal.close('confirmActivateModal')">Cancel</button>
+        <button class="btn btn-sm confirm-btn-success" id="confirmActivateBtn">Reactivate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM CREATE ADMIN MODAL -->
+<div id="confirmCreateModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card confirm-modal">
+    <div class="confirm-modal-inner">
+      <div class="confirm-icon confirm-icon-info">◈</div>
+      <h3 class="confirm-title">CREATE_ADMIN</h3>
+      <p class="confirm-body">Create this administrator account?</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost btn-sm" onclick="Modal.close('confirmCreateModal')">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="confirmCreateBtn">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REWARD THRESHOLD MODAL -->
+<div id="thresholdModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card" style="width:480px">
+    <button class="modal-close" onclick="closeThresholdModal()" style="top:30px;right:30px">✕</button>
+    <div style="padding:40px">
+      <h2 id="thresholdModalTitle" style="font-family:'Orbitron';letter-spacing:2px;font-size:1.5rem;margin-top:10px;margin-bottom:28px">ADD_THRESHOLD</h2>
+
+      <form id="thresholdForm">
+        <div class="field-group" style="margin-bottom:24px">
+          <label>POINTS_NEEDED</label>
+          <input type="number" id="thresholdPoints" class="input-luxury" placeholder="e.g. 100" min="1" required>
+        </div>
+
+        <div class="field-group" style="margin-bottom:32px">
+          <label>DISCOUNT_PERCENT (%)</label>
+          <input type="number" id="thresholdDiscount" class="input-luxury" placeholder="e.g. 5" min="1" max="100" step="0.5" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full btn-lg" style="height:60px;border-radius:16px;font-size:1rem">COMMIT_THRESHOLD</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<!-- Chart.js — required for COMMAND_CENTER analytics charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+<script src="../js/admin.js"></script>
+
+</body>
+</html>

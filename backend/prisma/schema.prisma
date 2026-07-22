@@ -1,0 +1,266 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  password       String
+  role           Role           @default(USER)
+  isActive       Boolean        @default(true)
+  lastLogin      DateTime?
+  points         Int            @default(0)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  cart           CartItem[]
+  wishlist       WishlistItem[]
+  orders         Order[]
+  reviews        Review[]
+  rewardsHistory RewardHistory[]
+  coupons        Coupon[]
+  supportTickets SupportTicket[]
+
+  @@map("users")
+}
+
+model Product {
+  id            String         @id @default(uuid())
+  name          String
+  description   String
+  price         Float
+  category      String
+  tag           String?
+  stock         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  images        String[]
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+
+  @@map("products")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  userId    String
+  productId String
+  quantity  Int     @default(1)
+  size      String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId, size])
+  @@map("cart_items")
+}
+
+model WishlistItem {
+  id        String  @id @default(uuid())
+  userId    String
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  status        OrderStatus @default(PENDING)
+  total         Float
+  discount      Float       @default(0)
+  pointsAwarded Boolean     @default(false)
+  couponId      String?     @unique
+  coupon        Coupon?     @relation("OrderCoupon", fields: [couponId], references: [id], onDelete: SetNull)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  size      String
+  price     Float
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+enum Role {
+  USER
+  ADMIN
+  OWNER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+// ── Staff Audit Logging ──────────────────────────────────────────────────────
+enum StaffAction {
+  ADMIN_CREATED
+  ADMIN_UPDATED
+  ADMIN_SUSPENDED
+  ADMIN_REACTIVATED
+}
+
+model StaffAuditLog {
+  id          String      @id @default(uuid())
+  action      StaffAction
+  ownerId     String      // Who performed the action (OWNER)
+  ownerName   String
+  targetId    String      // The admin account that was affected
+  targetName  String
+  targetEmail String
+  createdAt   DateTime    @default(now())
+
+  @@map("staff_audit_logs")
+}
+
+// ── Rewards Ecosystem ──────────────────────────────────────────────────────
+model Coupon {
+  id              String    @id @default(uuid())
+  code            String    @unique
+  discountPercent Float
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRedeemed      Boolean   @default(false)
+  redeemedAt      DateTime?
+  expiresAt       DateTime
+  createdAt       DateTime  @default(now())
+  order           Order?    @relation("OrderCoupon")
+
+  @@map("coupons")
+}
+
+model RewardHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  points      Int
+  description String
+  createdAt   DateTime @default(now())
+
+  @@map("reward_history")
+}
+
+model RewardsConfig {
+  id         String   @id @default("default")
+  dhPerPoint Int      @default(10) // 10 DH = 1 point
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("rewards_config")
+}
+
+model RewardThreshold {
+  id              String   @id @default(uuid())
+  pointsNeeded    Int      @unique
+  discountPercent Float
+  createdAt       DateTime @default(now())
+
+  @@map("reward_thresholds")
+}
+
+enum TicketStatus {
+  OPEN
+  WAITING_CUSTOMER
+  WAITING_SUPPORT
+  RESOLVED
+  CLOSED
+}
+
+enum TicketCategory {
+  ORDER_PROBLEM
+  PAYMENT_PROBLEM
+  PRODUCT_ISSUE
+  RETURN_EXCHANGE
+  ACCOUNT_ISSUE
+  OTHER
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model SupportTicket {
+  id          String         @id @default(uuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    TicketCategory
+  status      TicketStatus   @default(OPEN)
+  priority    TicketPriority @default(MEDIUM)
+  aiSummary   String?        
+  messages    SupportMessage[]
+  notes       SupportNote[]
+  rating      Int?
+  ratingNote  String?
+  ratedAt     DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("support_tickets")
+}
+
+model SupportMessage {
+  id         String        @id @default(uuid())
+  ticketId   String
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId   String        
+  senderRole Role          
+  senderName String
+  content    String
+  createdAt  DateTime      @default(now())
+
+  @@map("support_messages")
+}
+
+model SupportNote {
+  id         String        @id @default(uuid())
+  ticketId   String
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  authorId   String
+  authorName String
+  content    String
+  createdAt  DateTime      @default(now())
+
+  @@map("support_notes")
+}
+
+

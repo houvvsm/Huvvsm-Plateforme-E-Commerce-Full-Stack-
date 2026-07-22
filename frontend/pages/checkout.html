@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GATEWAY // HUVVSM CHECKOUT</title>
+  
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/checkout.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+</head>
+<body data-page="checkout">
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress"><div class="loader-bar"></div></div>
+    <div class="loader-status">
+      <span class="glitch-text">ENCRYPTING_GATEWAY</span>
+      <span class="binary-stream">11010001 01011110 10101101</span>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER SUCCESS OVERLAY -->
+<div class="order-success-overlay" id="successOverlay">
+  <div class="order-success-card">
+    <span class="success-icon">✦</span>
+    <div class="success-title">SIGNAL_TRANSMITTED</div>
+    <p class="success-sub">
+      Your order has been received and confirmed.<br>
+      Our core team will be in contact shortly.
+    </p>
+    <p class="success-redirect">REDIRECTING TO HOME IN <span id="countdownVal">3</span>s...</p>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="grid-bg"></div>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav-drawer" id="mobileDrawer">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close">×</button>
+    <nav class="mobile-nav-links">
+      <a href="index.html">HOME</a>
+      <a href="shop.html">CATALOGUE</a>
+      <a href="cart.html">RETURN_TO_CART</a>
+    </nav>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM</span>
+  </a>
+  <div class="navbar-actions">
+    <button class="navbar-icon-btn" data-magnetic onclick="window.location='auth.html'" title="Account">👤</button>
+    <button class="navbar-icon-btn" data-magnetic style="position:relative" onclick="window.location='cart.html'" title="Cart">
+      🛒
+      <span class="navbar-badge" data-cart-count style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <button class="navbar-icon-btn" data-magnetic id="mobileMenuBtn">☰</button>
+  </div>
+</header>
+
+<main class="checkout-container">
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="checkout-header" data-reveal>
+      <h1 class="display-3">FINAL_<span class="gradient-text">STEP.</span></h1>
+    </div>
+
+    <!-- STEP INDICATOR -->
+    <div class="checkout-steps" data-reveal>
+      <div class="checkout-step done">
+        <div class="step-num">✓</div>
+        <span>CART</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="checkout-step active">
+        <div class="step-num">02</div>
+        <span>CHECKOUT</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="checkout-step">
+        <div class="step-num">03</div>
+        <span>CONFIRMED</span>
+      </div>
+    </div>
+
+    <div class="checkout-grid">
+
+      <!-- ══ FORM ══ -->
+      <form id="checkoutForm">
+
+        <!-- IDENTITY -->
+        <div class="form-block" data-reveal>
+          <div class="form-block-header">
+            <div class="form-block-icon">👤</div>
+            <div>
+              <div class="form-block-title">IDENTITY_DATA</div>
+              <div class="form-block-subtitle">Your contact information</div>
+            </div>
+          </div>
+          <div class="input-grid">
+            <div class="input-group">
+              <label class="label">FULL_NAME</label>
+              <input type="text" id="userName" class="input" placeholder="NEO ENTITY" required>
+            </div>
+            <div class="input-group">
+              <label class="label">CONTACT_SIGNAL</label>
+              <input type="email" id="checkoutEmail" class="input" placeholder="ENTITY@SIGNAL.NET" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESTINATION -->
+        <div class="form-block" data-reveal>
+          <div class="form-block-header">
+            <div class="form-block-icon">📍</div>
+            <div>
+              <div class="form-block-title">PHYSICAL_DESTINATION</div>
+              <div class="form-block-subtitle">Delivery address</div>
+            </div>
+          </div>
+          <div class="input-grid cols-1" style="gap:16px">
+            <div class="input-group">
+              <label class="label">DELIVERY_ADDRESS</label>
+              <input type="text" id="address" class="input" placeholder="NODE_X // STREET_Y" required>
+            </div>
+            <div class="input-group">
+              <label class="label">GEOGRAPHICAL_CITY</label>
+              <select id="city" class="input" required>
+                <option value="">CHOOSE_CITY</option>
+                <option>Casablanca</option>
+                <option>Rabat</option>
+                <option>Marrakech</option>
+                <option>Tanger</option>
+                <option>Fès</option>
+                <option>Agadir</option>
+                <option>Meknès</option>
+                <option>Oujda</option>
+                <option>Tétouan</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="form-block" data-reveal>
+          <div class="form-block-header">
+            <div class="form-block-icon">🔐</div>
+            <div>
+              <div class="form-block-title">PAYMENT_ENCRYPTION</div>
+              <div class="form-block-subtitle">Select your payment method</div>
+            </div>
+          </div>
+
+          <div class="payment-options">
+            <div class="payment-option">
+              <input type="radio" id="pay_delivery" name="payment_method" value="on_delivery" checked>
+              <label for="pay_delivery" class="payment-card">
+                <span class="pay-icon">🚚</span>
+                <span class="pay-label">DELIVERY</span>
+              </label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" id="pay_card" name="payment_method" value="card">
+              <label for="pay_card" class="payment-card">
+                <span class="pay-icon">💳</span>
+                <span class="pay-label">CARD</span>
+              </label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" id="pay_virement" name="payment_method" value="virement">
+              <label for="pay_virement" class="payment-card">
+                <span class="pay-icon">🏦</span>
+                <span class="pay-label">BANK</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="pay-info-box" id="cardInfo">
+            <strong>💳 SECURE_CARD_PAYMENT</strong>
+            <p style="margin-top:10px">Our core team will contact your signal after confirmation to finalise secure card processing.</p>
+          </div>
+          <div class="pay-info-box" id="virementInfo">
+            <strong>🏦 BANK_COORDINATES</strong>
+            <div class="rib">007 780 0001234567890012 26</div>
+            <p style="margin-top:10px">Holder: <strong>HUVVSM DIGITAL SARL</strong><br>Reference: YOUR_NAME + ORDER_DATE</p>
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="btn btn-primary checkout-submit-btn" id="completeOrderBtn" data-reveal>
+          CONFIRM_ORDER
+        </button>
+
+      </form>
+
+      <!-- ══ SUMMARY SIDEBAR ══ -->
+      <div class="checkout-summary-section" data-reveal>
+        <div class="summary-card">
+          <div class="summary-card-title">ORDER_MANIFEST</div>
+
+          <!-- Items list -->
+          <div class="summary-items" id="summaryItems">
+            <!-- Injected by JS -->
+          </div>
+
+          <!-- Coupon Selection -->
+          <div class="summary-coupon-section" style="margin-top: 20px; margin-bottom: 20px;">
+            <label class="label" style="font-size: 9px; letter-spacing: 0.1em; color: var(--text-muted); display: block; margin-bottom: 8px;">✦ APPLY_REWARDS_COUPON</label>
+            <select id="checkoutCoupon" class="input" style="font-family: var(--font-mono); font-size: 11px; padding: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; width: 100%; color: #fff; outline: none; transition: border-color 0.2s;">
+              <option value="">NO_COUPON_APPLIED</option>
+            </select>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row">
+            <span>SUBTOTAL</span>
+            <span id="summarySubtotal">0 DH</span>
+          </div>
+          <div class="summary-row" id="discountRow" style="display:none; color: #ff4d6d;">
+            <span>LOYALTY_DISCOUNT</span>
+            <span id="summaryDiscount">-0 DH</span>
+          </div>
+          <div class="summary-row">
+            <span>SHIPPING</span>
+            <span id="summaryShipping">50 DH</span>
+          </div>
+          <div class="summary-row">
+            <span>TAX (20%)</span>
+            <span id="summaryTax">0 DH</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row total">
+            <span>FINAL_VALUATION</span>
+            <span id="finalTotal">0 DH</span>
+          </div>
+
+          <div class="summary-secure">
+            🔒 &nbsp; SIGNAL_04 ENCRYPTED &nbsp;·&nbsp; SECURE TRANSACTION
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="navbar-logo" style="margin-bottom:20px;box-shadow:0 0 30px rgba(149,18,44,.3)">
+        <svg viewBox="0 0 120 120" width="28" fill="none" stroke="url(#gfooter)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gfooter" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <h3>HUVVSM</h3>
+      <p>Engineering digital identity through cinematic fashion and futuristic design systems.</p>
+    </div>
+    <div class="footer-col">
+      <h4>SHOP</h4>
+      <a href="shop.html">All Products</a>
+      <a href="lookbook.html">Lookbook</a>
+    </div>
+    <div class="footer-col">
+      <h4>ACCOUNT</h4>
+      <a href="auth.html">Sign In</a>
+      <a href="auth.html">Create Account</a>
+    </div>
+    <div class="footer-col">
+      <h4>LINKS</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="support.html">CONTACT_SUPPORT</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 HUVVSM — ALL RIGHTS RESERVED</span>
+    <span class="label text-muted">SIGNAL SYSTEM V4.8</span>
+  </div>
+</footer>
+
+<!-- MOTION LIBRARIES -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<!-- CORE SYSTEMS -->
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+
+<!-- PAGE LOGIC -->
+<script src="../js/checkout.js"></script>
+
+</body>
+</html>

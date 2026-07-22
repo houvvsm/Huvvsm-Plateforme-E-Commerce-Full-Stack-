@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUVVSM — ENGINEERING DIGITAL IDENTITY</title>
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="../css/mobile.css">
+</head>
+<body>
+
+<!-- GLOBAL LOADER -->
+<div id="global-loader">
+  <div class="loader-content">
+    <div class="loader-circle"></div>
+    <div class="loader-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gloader)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gloader" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-ui">
+    <div class="loader-progress">
+      <div class="loader-bar"></div>
+    </div>
+    <div class="loader-status">
+      <span class="glitch-text">INITIALIZING NEURAL_LINK</span>
+      <span class="binary-stream">01011101 11010101 10101011</span>
+    </div>
+  </div>
+</div>
+
+<!-- ATMOSPHERE -->
+<div id="mouse-glow"></div>
+<div class="cursor-outer"></div>
+<div class="custom-cursor"></div>
+<div class="orb-field">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-bg"></div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="navbar-logo">
+      <svg viewBox="0 0 120 120" fill="none" stroke="url(#gnav)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+        <defs><linearGradient id="gnav" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+        <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+      </svg>
+    </div>
+    <span>HUVVSM</span>
+  </a>
+  <nav class="navbar-links">
+    <a href="index.html" class="active">HOME</a>
+    <a href="shop.html">CATALOGUE</a>
+    <a href="lookbook.html">LOOKBOOK</a>
+  </nav>
+  <div class="navbar-actions">
+    <button class="navbar-icon-btn" data-magnetic onclick="window.location='auth.html'" title="Account">👤</button>
+    <button class="navbar-icon-btn" data-magnetic style="position:relative" onclick="window.location='cart.html'" title="Cart">
+      🛒
+      <span class="navbar-badge" data-cart-count style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <button class="navbar-icon-btn" data-magnetic id="mobileMenuBtn">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav-drawer" id="mobileDrawer">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close">×</button>
+    <nav class="mobile-nav-links">
+      <a href="index.html">HOME</a>
+      <a href="shop.html">CATALOGUE</a>
+      <a href="lookbook.html">LOOKBOOK</a>
+      <a href="cart.html">CART</a>
+      <a href="dashboard.html">DASHBOARD</a>
+      <a href="auth.html">ACCOUNT</a>
+    </nav>
+    <div style="margin-top:auto;padding-top:40px;border-top:1px solid var(--line)">
+      <div class="section-tag" style="margin-bottom:12px">SYSTEM STATUS</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#00ff78;box-shadow:0 0 10px #00ff78"></div>
+        <span class="label text-muted">SIGNAL_04 LIVE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- 01 — HERO                                              -->
+<!-- ====================================================== -->
+<section class="hero-section" id="hero">
+  <div class="hero-left">
+    <div class="hero-pill">
+      <div class="hero-pulse"></div>
+      <span class="label">SIGNAL_04 — LIVE NOW</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="hero-line">ENGINEERING</span>
+      <span class="hero-line">DIGITAL</span>
+      <span class="hero-line gradient-text">IDENTITY</span>
+    </h1>
+
+    <p class="hero-desc body-lg">
+      A futuristic fashion platform where cinematic visuals,
+      immersive systems and experimental motion design merge
+      into a premium digital universe.
+    </p>
+
+    <div class="hero-actions">
+      <a href="shop.html" class="btn btn-primary btn-lg" data-magnetic>
+        ENTER SYSTEM
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="lookbook.html" class="btn btn-ghost btn-lg" data-magnetic>EXPLORE DROPS</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="core-system">
+      <div class="core-ring core-ring-1"></div>
+      <div class="core-ring core-ring-2"></div>
+      <div class="core-ring core-ring-3"></div>
+      <div class="core-logo">
+        <svg viewBox="0 0 120 120" fill="none" stroke="url(#gcore)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gcore" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <div class="float-card float-card-1"><span class="label text-muted">NEURAL</span><h3>98%</h3></div>
+      <div class="float-card float-card-2"><span class="label text-muted">DROP</span><h3>VOID SIGNAL</h3></div>
+      <div class="float-card float-card-3"><span class="label text-muted">MODE</span><h3>IMMERSIVE</h3></div>
+      <div class="float-card float-card-4"><span class="label text-muted">COLLECTION</span><h3>SIGNAL_04</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>HUVVSM_SIGNAL_04</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>LIMITED_RELEASE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>CYBER_IDENTITY</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>IMMERSIVE_DESIGN</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>OVERSIZED_SYSTEM</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DROP_LIVE_NOW</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DIGITAL_FASHION</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FUTURISTIC_IDENTITY</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>HUVVSM_SIGNAL_04</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>LIMITED_RELEASE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>CYBER_IDENTITY</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>IMMERSIVE_DESIGN</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>OVERSIZED_SYSTEM</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DROP_LIVE_NOW</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DIGITAL_FASHION</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FUTURISTIC_IDENTITY</span>
+  </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- 02 — FEATURED PIECES                                   -->
+<!-- ====================================================== -->
+<section class="featured-section" id="featured">
+  <div class="container">
+    <div class="featured-header" data-reveal>
+      <div>
+        <div class="section-tag">SIGNAL_04 DROP</div>
+        <h2 class="display-3" style="margin-top:20px">FEATURED<br><span class="gradient-text">PIECES.</span></h2>
+      </div>
+      <a href="shop.html" class="btn btn-ghost" data-magnetic>VIEW ALL PRODUCTS →</a>
+    </div>
+
+    <div class="featured-grid" id="featuredGrid">
+      <div class="feedback-empty" style="grid-column: 1 / -1; width: 100%; text-align: center;">
+        <p>SYNCING_FEATURED_PIECES...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- 03 — BRAND STATEMENT                                   -->
+<!-- ====================================================== -->
+<section class="statement-section">
+  <div class="statement-bg"></div>
+  <div class="container">
+    <div class="statement-grid">
+      <div class="statement-left" data-reveal>
+        <div class="section-tag" style="margin-bottom:32px">DIGITAL MANIFEST</div>
+        <h2 class="display-2">
+          HUVVSM IS<br>NOT CLOTHING.<br>
+          <span class="gradient-text">IT IS SIGNAL.</span>
+        </h2>
+        <p class="body-lg" style="margin:36px 0;max-width:480px">
+          Built through cinematic visuals, futuristic interaction systems
+          and premium digital storytelling. Every piece is a transmission
+          from the future.
+        </p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <a href="lookbook.html" class="btn btn-primary" data-magnetic>VIEW LOOKBOOK</a>
+          <a href="shop.html" class="btn btn-ghost" data-magnetic>SHOP NOW</a>
+        </div>
+      </div>
+
+      <div class="statement-right" data-reveal data-reveal-delay="2">
+        <div class="stmt-card">
+          <span class="label text-muted">SYSTEM STATUS</span>
+          <h3>ONLINE</h3>
+          <div class="stmt-bar" style="width:100%"></div>
+        </div>
+        <div class="stmt-card">
+          <span class="label text-muted">IDENTITY MODE</span>
+          <h3>IMMERSIVE</h3>
+          <div class="stmt-bar" style="width:90%"></div>
+        </div>
+        <div class="stmt-card">
+          <span class="label text-muted">ACTIVE SIGNALS</span>
+          <h3 data-counter>12480</h3>
+          <div class="stmt-bar" style="width:75%"></div>
+        </div>
+        <div class="stmt-card">
+          <span class="label text-muted">CURRENT DROP</span>
+          <h3 style="color:var(--accent)">SIGNAL_04</h3>
+          <div class="stmt-bar" style="background:var(--accent);width:55%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- 04 — SIGNAL FEEDBACK (REAL USER REVIEWS)               -->
+<!-- ====================================================== -->
+<section class="feedback-section">
+  <div class="container">
+    <div class="feedback-header" data-reveal>
+      <div class="section-tag">VERIFIED_TRANSMISSIONS</div>
+      <h2 class="display-3" style="margin-top:20px">SIGNAL<br><span class="gradient-text">FEEDBACK.</span></h2>
+    </div>
+
+    <div id="feedbackContainer">
+      <!-- Dynamically populated by index.js -->
+      <div class="feedback-empty">
+        <p>SYNCING_USER_TRANSMISSIONS...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- 05 — NEWSLETTER                                        -->
+<!-- ====================================================== -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-card" data-reveal>
+      <div class="newsletter-glow"></div>
+      <div class="newsletter-inner">
+        <div>
+          <div class="section-tag" style="margin-bottom:20px">ENTER THE SIGNAL</div>
+          <h2 class="display-3">JOIN THE<br>HUVVSM<br><span class="gradient-text">NETWORK.</span></h2>
+          <p class="body-lg" style="margin-top:20px;max-width:400px">Exclusive releases, cinematic drops and future signals. No spam.</p>
+        </div>
+        <div class="newsletter-form-col">
+          <form class="newsletter-form-wrap" id="newsletterForm" novalidate>
+            <div class="input-group" style="width:100%">
+              <label class="input-label">YOUR EMAIL</label>
+              <input class="input" type="email" name="email" placeholder="ENTER YOUR EMAIL" required id="newsletterEmail">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" data-magnetic id="newsletterBtn">CONNECT</button>
+            <div class="newsletter-success hidden" id="newsletterSuccess">
+              <span style="font-size:1.5rem">✓</span>
+              <span class="label" style="color:#00ff78">YOU'RE IN THE SIGNAL</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="navbar-logo" style="margin-bottom:20px;box-shadow:0 0 30px rgba(149,18,44,.3)">
+        <svg viewBox="0 0 120 120" width="28" fill="none" stroke="url(#gfooter)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="gfooter" x1="0" x2="1"><stop offset="0" stop-color="#00E5FF"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs>
+          <g transform="translate(12,12) scale(0.8)"><path d="M10 10 L10 90 L30 90 L30 54 L60 90 L90 54 L90 90 L110 90 L110 10"/></g>
+        </svg>
+      </div>
+      <h3>HUVVSM</h3>
+      <p>Engineering digital identity through cinematic fashion and futuristic design systems.</p>
+    </div>
+    <div class="footer-col">
+      <h4>SHOP</h4>
+      <a href="shop.html">All Products</a>
+      <a href="lookbook.html">Lookbook</a>
+      <a href="shop.html">New Arrivals</a>
+      <a href="shop.html">Sale</a>
+    </div>
+    <div class="footer-col">
+      <h4>ACCOUNT</h4>
+      <a href="auth.html">Sign In</a>
+      <a href="auth.html">Create Account</a>
+      <a href="dashboard.html">My Orders</a>
+      <a href="cart.html">Cart</a>
+    </div>
+    <div class="footer-col">
+      <h4>LINKS</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">Discord</a>
+      <a href="support.html">CONTACT_SUPPORT</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 HUVVSM — ALL RIGHTS RESERVED</span>
+    <span class="label text-muted">SIGNAL SYSTEM V4.8</span>
+  </div>
+</footer>
+
+<!-- MOTION LIBRARIES -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<!-- CORE SYSTEMS -->
+<script src="../js/globals.js"></script>
+<script src="../js/script.js"></script>
+
+<!-- PAGE LOGIC -->
+<script src="../js/index.js"></script>
+
+</body>
+</html>

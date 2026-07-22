@@ -1,0 +1,233 @@
+/* ============================================================ */
+/* HUVVSM — AUTHENTICATION SYSTEM STYLES                        */
+/* ============================================================ */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  z-index: 5;
+}
+
+/* Background Identity Title */
+.auth-title-large {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(10rem, 25vw, 30rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+  z-index: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: identityPulse 12s ease-in-out infinite;
+  user-select: none;
+}
+
+@keyframes identityPulse {
+  0%, 100% { opacity: 0.04; -webkit-text-stroke: 1px rgba(255, 255, 255, 0.04); }
+  50% { opacity: 0.1; -webkit-text-stroke: 1px rgba(139, 92, 255, 0.2); }
+}
+
+.auth-card {
+  width: min(480px, 100%);
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+}
+
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.02);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.4s var(--ease);
+  position: relative;
+}
+
+.auth-tab.active {
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+}
+
+.auth-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 2px;
+  background: var(--c1);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.auth-form {
+  padding: 48px;
+  display: none;
+}
+
+.auth-form.active {
+  display: block;
+}
+
+.auth-header {
+  margin-bottom: 40px;
+}
+
+.cyber-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--c1);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.auth-title {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.input-group {
+  margin-bottom: 24px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-muted);
+}
+
+.auth-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 32px 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.forgot-link, .terms-text a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.forgot-link:hover, .terms-text a:hover {
+  color: var(--c1);
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.checkbox-container input {
+  display: none;
+}
+
+.checkmark {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+  position: relative;
+}
+
+.checkbox-container input:checked + .checkmark {
+  background: var(--c1);
+  border-color: var(--c1);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.checkbox-container input:checked + .checkmark::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  color: #000;
+  font-weight: 900;
+}
+
+.terms-text {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* PROFILE CARD */
+.profile-card {
+  padding: 48px;
+}
+
+.profile-info {
+  margin: 32px 0;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item .label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.info-item .value {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.profile-actions {
+  margin-top: 40px;
+}
+
+@media (max-width: 480px) {
+  .auth-form {
+    padding: 32px 24px;
+  }
+  .auth-title {
+    font-size: 2.6rem;
+  }
+}
