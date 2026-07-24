@@ -520,15 +520,23 @@ async function renderProductManagement() {
           <tbody>
             ${products.map(p => {
               const stockClass = p.stock === 0 ? 'stock-row-zero' : p.stock < 5 ? 'stock-row-low' : '';
+              // Build per-size chips for display
+              const sizeChips = p.sizeStock
+                ? Object.entries(p.sizeStock).map(([sz, qty]) => {
+                    const cls = qty === 0 ? 'size-chip-oos' : qty < 3 ? 'size-chip-low' : 'size-chip-ok';
+                    return `<span class="size-chip ${cls}">${sz}:${qty}</span>`;
+                  }).join('')
+                : `<span style="font-size:11px;opacity:0.5">—</span>`;
               return `
               <tr class="${stockClass}">
                 <td><img src="${Format.image((p.images && p.images[0]) ? p.images[0] : '')}" class="prod-thumb"></td>
                 <td style="font-weight:600">${p.name}</td>
                 <td>${Format.price(p.price)}</td>
                 <td>
-                  <div class="stock-edit-cell">
-                    <input type="number" min="0" class="stock-input" id="stock-input-${p.id}" value="${p.stock}">
-                    <button class="icon-btn stock-save-btn" onclick="updateProductStock('${p.id}')" title="Save stock">✓</button>
+                  <div class="size-chips-row">${sizeChips}</div>
+                  <div class="stock-edit-cell" style="margin-top:6px">
+                    <span style="font-family:var(--font-mono);font-size:10px;opacity:0.5">TOTAL:</span>
+                    <span style="font-family:var(--font-mono);font-size:12px;font-weight:700">${p.stock}</span>
                     ${p.stock === 0 ? `<span class="stock-flag stock-flag-zero">ZERO</span>` : p.stock < 5 ? `<span class="stock-flag stock-flag-low">LOW</span>` : ''}
                   </div>
                 </td>
@@ -558,6 +566,14 @@ function showProductModal(id = null) {
     document.getElementById(`fileName${idx}`).innerText         = '';
   });
 
+  // Reset size stock inputs
+  ['S','M','L','XL'].forEach(s => {
+    const el = document.getElementById(`sizeStock_${s}`);
+    if (el) el.value = 0;
+  });
+  const totalEl = document.getElementById('sizeTotalDisplay');
+  if (totalEl) totalEl.textContent = '0';
+
   document.getElementById('prodId').value       = id || '';
   document.getElementById('modalTitle').innerText = id ? 'EDIT PRODUCT' : 'ADD PRODUCT';
 
@@ -567,8 +583,20 @@ function showProductModal(id = null) {
       document.getElementById('prodName').value     = p.name;
       document.getElementById('prodPrice').value    = p.price;
       document.getElementById('prodCategory').value = p.category;
-      document.getElementById('prodStock').value    = p.stock;
+      if (document.getElementById('prodTag')) document.getElementById('prodTag').value = p.tag || '';
       document.getElementById('prodDesc').value     = p.description;
+
+      // Populate per-size stock inputs
+      const ss = p.sizeStock || {};
+      let total = 0;
+      ['S','M','L','XL'].forEach(s => {
+        const el = document.getElementById(`sizeStock_${s}`);
+        if (el) {
+          el.value = ss[s] !== undefined ? ss[s] : 0;
+          total += parseInt(el.value) || 0;
+        }
+      });
+      if (totalEl) totalEl.textContent = total;
 
       p.images.forEach((img, idx) => {
         if (img && idx < 4) {
@@ -580,6 +608,18 @@ function showProductModal(id = null) {
       });
     });
   }
+
+  // Live total counter — use oninput directly to avoid stacking listeners on each modal open
+  ['S','M','L','XL'].forEach(s => {
+    const el = document.getElementById(`sizeStock_${s}`);
+    if (el) el.oninput = () => {
+      let t = 0;
+      ['S','M','L','XL'].forEach(sz => {
+        t += parseInt(document.getElementById(`sizeStock_${sz}`)?.value) || 0;
+      });
+      if (totalEl) totalEl.textContent = t;
+    };
+  });
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -614,18 +654,42 @@ function closeProductModal() {
 
 async function handleProductSubmit(e) {
   e.preventDefault();
+
+  const name     = document.getElementById('prodName')?.value.trim();
+  const price    = document.getElementById('prodPrice')?.value.trim();
+  const category = document.getElementById('prodCategory')?.value;
+  const desc     = document.getElementById('prodDesc')?.value.trim();
+
+  // Manual validation — HTML5 required can't show tooltips inside CSS-transformed modals
+  if (!name) { Toast.error('SPECIMEN_IDENTIFIER required'); return; }
+  if (!price || isNaN(parseFloat(price))) { Toast.error('VALUATION required'); return; }
+  if (!category) { Toast.error('CLASSIFICATION required'); return; }
+
+  const submitBtn = document.querySelector('#productForm button[type="submit"]');
+  const origLabel = submitBtn ? submitBtn.textContent : '';
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'COMMITTING...'; }
+
   const id       = document.getElementById('prodId').value;
   const formData = new FormData();
 
-  formData.append('name',        document.getElementById('prodName').value);
-  formData.append('price',       document.getElementById('prodPrice').value);
-  formData.append('category',    document.getElementById('prodCategory').value);
-  formData.append('stock',       document.getElementById('prodStock').value);
-  formData.append('description', document.getElementById('prodDesc').value);
+  formData.append('name',        name);
+  formData.append('price',       price);
+  formData.append('category',    category);
+  formData.append('description', desc || '');
+  const tagVal = document.getElementById('prodTag')?.value.trim();
+  if (tagVal) formData.append('tag', tagVal);
+
+  // Build sizeStock JSON from per-size inputs
+  const sizeStock = {};
+  ['S','M','L','XL'].forEach(s => {
+    const val = parseInt(document.getElementById(`sizeStock_${s}`)?.value) || 0;
+    sizeStock[s] = val;
+  });
+  formData.append('sizeStock', JSON.stringify(sizeStock));
 
   [1, 2, 3, 4].forEach(idx => {
-    const file = document.getElementById(`prodImage${idx}`).files[0];
-    if (file) formData.append(`image${idx}`, file);
+    const fileInput = document.getElementById(`prodImage${idx}`);
+    if (fileInput && fileInput.files[0]) formData.append(`image${idx}`, fileInput.files[0]);
   });
 
   try {
@@ -636,7 +700,17 @@ async function handleProductSubmit(e) {
       headers: { 'Authorization': `Bearer ${Auth.getToken()}` },
       body: formData
     });
-    const result = await res.json();
+
+    let result;
+    try {
+      result = await res.json();
+    } catch (_) {
+      // Backend returned non-JSON (e.g. HTML error page)
+      throw new Error(`Server returned HTTP ${res.status} ${res.statusText} (non-JSON response). Check backend is running.`);
+    }
+
+    console.log('[PRODUCT SUBMIT] HTTP', res.status, result);
+
     if (result.success) {
       Toast.success(id ? 'SPECIMEN_UPDATED' : 'SIGNAL_COMMITTED');
       closeProductModal();
@@ -645,7 +719,10 @@ async function handleProductSubmit(e) {
       Toast.error(result.error || 'COMMIT_FAILED');
     }
   } catch (err) {
-    Toast.error('CONNECTION_LOST');
+    console.error('[PRODUCT SUBMIT ERROR]', err);
+    Toast.error(err.message || 'CONNECTION_LOST');
+  } finally {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origLabel; }
   }
 }
 

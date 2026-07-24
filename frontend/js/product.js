@@ -116,15 +116,38 @@ function renderProduct(p) {
     });
   }
 
-  // Size Selection
-  const sizeBtns = document.querySelectorAll('.size-btn');
-  sizeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (p.stock <= 0) return;
-      sizeBtns.forEach(b => b.classList.remove('active'));
+  // ── SIZE BUTTONS — Dynamic from sizeStock ──
+  const sizeOptionsEl = document.getElementById('sizeOptions');
+  const defaultSizes  = ['S', 'M', 'L', 'XL'];
+  const sizeStock     = p.sizeStock && typeof p.sizeStock === 'object' ? p.sizeStock : null;
+  const sizesToRender = sizeStock ? Object.keys(sizeStock) : defaultSizes;
+
+  if (sizeOptionsEl) {
+    sizeOptionsEl.innerHTML = sizesToRender.map((sz, idx) => {
+      const qty   = sizeStock ? (sizeStock[sz] || 0) : (p.stock > 0 ? 99 : 0);
+      const isOos = qty <= 0;
+      return `<button
+        class="size-btn${isOos ? ' size-btn--oos' : ''}${idx === 0 && !isOos ? ' active' : ''}"
+        data-size="${sz}"
+        data-qty="${qty}"
+        ${isOos ? 'disabled title="OUT_OF_STOCK"' : ''}
+      >${sz}</button>`;
+    }).join('');
+
+    // Find first available and make active
+    const firstAvail = sizeOptionsEl.querySelector('.size-btn:not(.size-btn--oos)');
+    if (firstAvail) {
+      sizeOptionsEl.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      firstAvail.classList.add('active');
+    }
+
+    sizeOptionsEl.addEventListener('click', e => {
+      const btn = e.target.closest('.size-btn');
+      if (!btn || btn.disabled) return;
+      sizeOptionsEl.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     });
-  });
+  }
 
   // Add to Cart
   const addBtn = document.getElementById('addToCartBtn');
@@ -137,12 +160,18 @@ function renderProduct(p) {
         return;
       }
 
-      const activeSizeEl = document.querySelector('.size-btn.active');
-      const activeSize = activeSizeEl ? activeSizeEl.textContent : 'L';
-      const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+      const activeSizeEl  = document.querySelector('.size-btn.active');
+      const activeSize     = activeSizeEl ? activeSizeEl.dataset.size || activeSizeEl.textContent.trim() : 'L';
+      const activeSizeQty  = activeSizeEl ? parseInt(activeSizeEl.dataset.qty || 99) : _currentProduct.stock;
+      const qty            = parseInt(qtyInput ? qtyInput.value : 1) || 1;
 
-      if (qty > _currentProduct.stock) {
-        Toast.error(`Only ${_currentProduct.stock} unit(s) available`);
+      if (activeSizeQty <= 0) {
+        Toast.error('This size is out of stock');
+        return;
+      }
+
+      if (qty > activeSizeQty) {
+        Toast.error(`Only ${activeSizeQty} unit(s) available in size ${activeSize}`);
         return;
       }
 
@@ -151,7 +180,7 @@ function renderProduct(p) {
       try {
         if (Auth.isLoggedIn()) {
           await API.post('/cart', { productId: p.id, quantity: qty, size: activeSize });
-          Toast.success(`${p.name} added to core database`);
+          Toast.success(`${p.name} added to cart`);
           Cart._update();
         } else {
           Cart.add({

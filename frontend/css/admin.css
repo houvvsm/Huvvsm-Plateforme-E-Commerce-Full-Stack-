@@ -958,4 +958,117 @@ tr.stock-row-zero { background: rgba(255,77,109,0.04); }
   font-style: italic;
   color: var(--text-3, #555);
   font-size: 10px;
-}
+}
+
+/* ------------------------------------------------------------ */
+/* SIZE STOCK MATRIX — Admin Product Modal                       */
+/* ------------------------------------------------------------ */
+.size-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.size-stock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 12px 8px;
+  transition: border-color 0.2s;
+}
+
+.size-stock-item:focus-within {
+  border-color: var(--accent, #00e5ff);
+  box-shadow: 0 0 0 2px rgba(0,229,255,0.12);
+}
+
+.size-stock-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent, #00e5ff);
+}
+
+.size-stock-input {
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 8px 4px;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.size-stock-input::-webkit-inner-spin-button,
+.size-stock-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.size-stock-input:focus {
+  border-color: var(--accent, #00e5ff);
+}
+
+.size-stock-hint {
+  margin-top: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-3, #666);
+  letter-spacing: 1px;
+}
+
+.size-stock-hint span {
+  color: var(--accent, #00e5ff);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------ */
+/* SIZE CHIPS — Inventory Table                                  */
+/* ------------------------------------------------------------ */
+.size-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.size-chip {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.size-chip-ok {
+  background: rgba(0,255,120,0.12);
+  color: #00ff78;
+  border: 1px solid rgba(0,255,120,0.25);
+}
+
+.size-chip-low {
+  background: rgba(255,193,7,0.12);
+  color: #ffc107;
+  border: 1px solid rgba(255,193,7,0.25);
+}
+
+.size-chip-oos {
+  background: rgba(255,77,109,0.10);
+  color: #ff4d6d;
+  border: 1px solid rgba(255,77,109,0.25);
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+

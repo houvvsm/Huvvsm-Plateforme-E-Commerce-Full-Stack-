@@ -1,5 +1,11 @@
 import { prisma } from '../config/db.js';
 
+// Helper: sum all sizes from sizeStock object
+function sumSizeStock(sizeStock) {
+  if (!sizeStock || typeof sizeStock !== 'object') return null;
+  return Object.values(sizeStock).reduce((acc, v) => acc + (parseInt(v) || 0), 0);
+}
+
 // @desc    Get all products
 // @route   GET /api/v1/products
 // @access  Public
@@ -37,7 +43,7 @@ export const getProduct = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, category, stock, tag } = req.body;
+    const { name, description, price, category, stock, tag, sizeStock: rawSizeStock } = req.body;
     let imageUrls = [];
     const baseUrl = `${req.protocol}://${req.get('host')}`;
 
@@ -51,13 +57,26 @@ export const createProduct = async (req, res) => {
       }
     }
 
+    // Parse sizeStock if provided (sent as JSON string in FormData)
+    let sizeStock = null;
+    let computedStock = parseInt(stock) || 0;
+    if (rawSizeStock) {
+      try {
+        sizeStock = typeof rawSizeStock === 'string' ? JSON.parse(rawSizeStock) : rawSizeStock;
+        // Auto-compute total stock as sum of all sizes
+        const sum = sumSizeStock(sizeStock);
+        if (sum !== null) computedStock = sum;
+      } catch (_) { /* malformed — ignore */ }
+    }
+
     const product = await prisma.product.create({
       data: {
         name,
         description,
         price: parseFloat(price),
         category,
-        stock: parseInt(stock),
+        stock: computedStock,
+        sizeStock,
         tag,
         images: imageUrls
       }
@@ -73,7 +92,7 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, category, stock, tag } = req.body;
+    const { name, description, price, category, stock, tag, sizeStock: rawSizeStock } = req.body;
     
     // Get existing product to handle partial image updates
     const currentProduct = await prisma.product.findUnique({ where: { id: req.params.id } });
@@ -84,8 +103,19 @@ export const updateProduct = async (req, res) => {
     if (description) updateData.description = description;
     if (price) updateData.price = parseFloat(price);
     if (category) updateData.category = category;
-    if (stock) updateData.stock = parseInt(stock);
     if (tag) updateData.tag = tag;
+
+    // Handle sizeStock
+    if (rawSizeStock) {
+      try {
+        const sizeStock = typeof rawSizeStock === 'string' ? JSON.parse(rawSizeStock) : rawSizeStock;
+        updateData.sizeStock = sizeStock;
+        const sum = sumSizeStock(sizeStock);
+        if (sum !== null) updateData.stock = sum;
+      } catch (_) { /* malformed — ignore */ }
+    } else if (stock !== undefined && stock !== '') {
+      updateData.stock = parseInt(stock);
+    }
 
     let imageUrls = [...currentProduct.images];
     const baseUrl = `${req.protocol}://${req.get('host')}`;
@@ -125,24 +155,34 @@ export const deleteProduct = async (req, res) => {
     res.status(400).json({ success: false, error: err.message });
   }
 };
-/* ============================================================ */
-/* ADD THIS FUNCTION TO YOUR EXISTING productController.js      */
-/* ============================================================ */
 
 // @desc    Update product stock only (ADMIN ONLY)
 // @route   PATCH /api/v1/products/:id/stock
 // @access  Private/Admin
 export const updateStock = async (req, res) => {
   try {
-    const { stock } = req.body;
+    const { stock, sizeStock: rawSizeStock } = req.body;
+    const updateData = {};
 
-    if (stock === undefined || stock === null || isNaN(stock) || stock < 0) {
-      return res.status(400).json({ success: false, error: 'Valid stock quantity required' });
+    if (rawSizeStock) {
+      try {
+        const sizeStock = typeof rawSizeStock === 'string' ? JSON.parse(rawSizeStock) : rawSizeStock;
+        updateData.sizeStock = sizeStock;
+        const sum = sumSizeStock(sizeStock);
+        if (sum !== null) updateData.stock = sum;
+      } catch (_) {
+        return res.status(400).json({ success: false, error: 'Invalid sizeStock format' });
+      }
+    } else {
+      if (stock === undefined || stock === null || isNaN(stock) || stock < 0) {
+        return res.status(400).json({ success: false, error: 'Valid stock quantity required' });
+      }
+      updateData.stock = parseInt(stock);
     }
 
     const product = await prisma.product.update({
       where: { id: req.params.id },
-      data: { stock: parseInt(stock) }
+      data: updateData
     });
 
     res.status(200).json({ success: true, data: product });
@@ -151,9 +191,4 @@ export const updateStock = async (req, res) => {
   }
 };
 
-/* ============================================================ */
-/* ALSO ADD THIS ROUTE TO productRoutes.js:                     */
-/*                                                                */
-/* import { updateStock } from '../controllers/productController.js'; */
-/* router.patch('/:id/stock', protect, authorize('ADMIN'), updateStock); */
-/* ============================================================ */
+

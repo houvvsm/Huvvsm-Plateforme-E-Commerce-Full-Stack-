@@ -92,15 +92,18 @@ huvvsm/
 ## 2. Product Management System
 
 ### Customer Features
-* Product Catalogue
-* Product Details Page
-* Multiple Product Images
+* Product Catalogue & Dynamic Category Filters (`Huvvsm`, `Anime`, `Gym`)
+* Product Details Page with Dynamic Per-Size Availability Matrix
+* Out-of-Stock Size Indicators (`.size-btn--oos`) with interactive `"OUT OF STOCK"` hover tooltips
+* Multiple Product Images & Interactive Thumbnail Viewer
 * Responsive Product Grid
 * **Specimen Ratings**: Integrated user reviews and star-based ratings
-* Real-Time Product Information
+* Real-Time Stock Status & Toast Feedback (`Added to cart`)
 
 ### Admin COMMAND_CENTER
 * **Inventory Control**: Create, Edit, and Delete products with multi-image support.
+* **SIZE_STOCK_MATRIX**: Per-size inventory management (`S`, `M`, `L`, `XL`) stored as JSON, auto-calculating total product stock.
+* **Inventory Table Size Badges**: Real-time color-coded stock chips (`🟢 ok / 🟡 low / 🔴 oos`) per size variant.
 * **SIGNAL_HISTORY (Order OMS)**: Real-time management of orders.
 * **FEEDBACK_LOGS**: Centralized moderation terminal to monitor and delete inappropriate reviews.
 * **SYSTEM_PARAMS**: Operational dashboard showing system metadata, color legends, and session settings.
@@ -261,7 +264,7 @@ The `/escalate` endpoint auto-assigns priority by scanning for keywords:
 * id, name, email, password, role, isActive, lastLogin, points, createdAt
 
 ## Product
-* id, name, description, price, category, tag, stock, images, createdAt
+* id, name, description, price, category, tag, stock, sizeStock, images, createdAt, updatedAt
 
 ## Review
 * id, userId, productId, rating, comment, createdAt

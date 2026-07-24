@@ -85,7 +85,7 @@ async function handleAddToCart(id, name, price, image) {
   if (Auth.isLoggedIn()) {
     try {
       await API.post('/cart', { productId: id, quantity: 1, size: 'L' });
-      Toast.success(`${name} added to core database`);
+      Toast.success(`${name} added to cart`);
       Cart._update();
     } catch (err) {
       Toast.error(err.error || err.message || 'Failed to update cart');
