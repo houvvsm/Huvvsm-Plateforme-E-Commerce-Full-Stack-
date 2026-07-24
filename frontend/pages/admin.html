@@ -305,6 +305,21 @@
   </div>
 </div>
 
+<!-- CONFIRM DELETE PRODUCT MODAL -->
+<div id="confirmDeleteProductModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card confirm-modal">
+    <div class="confirm-modal-inner">
+      <div class="confirm-icon confirm-icon-danger">✕</div>
+      <h3 class="confirm-title">DELETE_PRODUCT</h3>
+      <p class="confirm-body">Are you sure you want to delete this product?</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost btn-sm" onclick="Modal.close('confirmDeleteProductModal')">Cancel</button>
+        <button class="btn btn-sm confirm-btn-danger" id="confirmDeleteProductBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- REWARD THRESHOLD MODAL -->
 <div id="thresholdModal" class="modal-backdrop" data-lenis-prevent>
   <div class="modal luxury-card" style="width:480px">

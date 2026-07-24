@@ -727,12 +727,15 @@ async function handleProductSubmit(e) {
 }
 
 async function deleteProduct(id) {
-  if (!confirm('DELETE?')) return;
-  try {
-    await API.delete(`/products/${id}`);
-    Toast.success('PURGED');
-    renderProductManagement();
-  } catch (err) { Toast.error('FAILED'); }
+  Modal.open('confirmDeleteProductModal');
+  document.getElementById('confirmDeleteProductBtn').onclick = async () => {
+    Modal.close('confirmDeleteProductModal');
+    try {
+      await API.delete(`/products/${id}`);
+      Toast.success('SPECIMEN_DELETED');
+      renderProductManagement();
+    } catch (err) { Toast.error('FAILED'); }
+  };
 }
 
 async function updateProductStock(id) {
