@@ -1189,14 +1189,17 @@ async function renderFeedbackManagement() {
 }
 
 async function deleteReview(id) {
-  if (!confirm('REMOVE_THIS_TRANSMISSION_FROM_PUBLIC_FEED?')) return;
-  try {
-    await API.delete(`/admin/reviews/${id}`);
-    Toast.success('SIGNAL_PURGED');
-    renderFeedbackManagement();
-  } catch (err) {
-    Toast.error('FAILED');
-  }
+  Modal.open('confirmDeleteFeedbackModal');
+  document.getElementById('confirmDeleteFeedbackBtn').onclick = async () => {
+    Modal.close('confirmDeleteFeedbackModal');
+    try {
+      await API.delete(`/admin/reviews/${id}`);
+      Toast.success('SIGNAL_PURGED');
+      renderFeedbackManagement();
+    } catch (err) {
+      Toast.error('FAILED');
+    }
+  };
 }
 
 function escapeHtmlAdmin(str) {
