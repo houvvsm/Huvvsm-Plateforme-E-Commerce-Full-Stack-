@@ -300,6 +300,215 @@ export const sendOrderConfirmation = async (order, user) => {
 };
 
 /* ============================================================ */
+/* 2b. ORDER PENDING EMAIL                                      */
+/* Triggered: immediately after checkout (status = PENDING)    */
+/* Customer is told order is placed, awaiting team confirmation */
+/* ============================================================ */
+
+export const sendOrderPending = async (order, user) => {
+  const shortId = order.id.slice(0, 8).toUpperCase();
+  const date = new Date(order.createdAt).toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'long', year: 'numeric'
+  });
+
+  const html = emailLayout(`
+    <!-- HERO -->
+    <div style="text-align:center;padding:44px 0 32px">
+      <div style="display:inline-block;width:68px;height:68px;border-radius:16px;
+                  background:rgba(255,193,7,0.08);border:1px solid rgba(255,193,7,0.3);
+                  line-height:68px;font-size:28px;margin-bottom:24px">
+        ⏳
+      </div>
+      <div style="font-family:monospace;font-size:10px;letter-spacing:0.3em;color:#ffc107;margin-bottom:12px">
+        // SIGNAL_RECEIVED — AWAITING_CONFIRMATION
+      </div>
+      <h1 style="margin:0;font-size:26px;font-weight:900;color:#f1f5f9;letter-spacing:-0.01em">
+        ORDER PENDING
+      </h1>
+      <p style="color:#64748b;font-size:14px;margin-top:12px;line-height:1.7;max-width:420px;margin-left:auto;margin-right:auto">
+        Thank you, ${user.name}.<br>
+        Your order has been received and is now <strong style="color:#ffc107">pending confirmation</strong>.<br>
+        Our team will review and confirm it shortly.
+      </p>
+    </div>
+
+    <!-- ORDER ID BOX -->
+    <div style="background:#0a0c14;border:1px solid #1a1d2e;border-radius:12px;
+                padding:20px;margin-bottom:24px;text-align:center">
+      <div style="font-family:monospace;font-size:9px;letter-spacing:0.25em;color:#475569;margin-bottom:6px">
+        ORDER_ID
+      </div>
+      <div style="font-family:monospace;font-size:22px;font-weight:700;color:#ffc107;letter-spacing:0.1em">
+        #${shortId}
+      </div>
+      <div style="font-family:monospace;font-size:10px;letter-spacing:0.15em;color:#475569;margin-top:6px">
+        ${date}
+      </div>
+    </div>
+
+    <!-- STATUS STEPS -->
+    <div style="background:#0a0c14;border:1px solid #1a1d2e;border-radius:12px;
+                padding:24px;margin-bottom:24px">
+      <div style="font-family:monospace;font-size:9px;letter-spacing:0.25em;color:#475569;margin-bottom:18px;text-align:center">
+        ORDER_JOURNEY
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;position:relative">
+        <!-- step line -->
+        <div style="position:absolute;top:14px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,#ffc107 25%,#1a1d2e 25%)"></div>
+        <!-- steps -->
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#ffc107;margin:0 auto 8px;line-height:28px;font-size:13px">✦</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#ffc107">PENDING</div>
+        </div>
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#1a1d2e;margin:0 auto 8px;line-height:28px;font-size:13px;color:#475569">○</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#475569">CONFIRMED</div>
+        </div>
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#1a1d2e;margin:0 auto 8px;line-height:28px;font-size:13px;color:#475569">○</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#475569">SHIPPED</div>
+        </div>
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#1a1d2e;margin:0 auto 8px;line-height:28px;font-size:13px;color:#475569">○</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#475569">DELIVERED</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOTAL -->
+    <div style="background:#0a0c14;border:1px solid #1a1d2e;border-radius:12px;padding:18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-family:monospace;font-size:10px;letter-spacing:0.2em;color:#475569">ORDER_TOTAL</span>
+      <span style="font-family:monospace;font-size:20px;font-weight:700;color:#00e5ff">${order.total.toLocaleString('fr-MA')} DH</span>
+    </div>
+
+    <!-- MESSAGE -->
+    <div style="background:rgba(255,193,7,0.05);border:1px solid rgba(255,193,7,0.2);
+                border-radius:12px;padding:20px;margin-bottom:28px;text-align:center">
+      <p style="color:#94a3b8;font-size:13px;line-height:1.75;margin:0">
+        You will receive another email once our team <strong style="color:#ffc107">confirms</strong> your order.<br>
+        If you have any questions, don't hesitate to contact us.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    ${ctaButton('VIEW MY ORDERS →', `${process.env.FRONTEND_URL || 'http://localhost:5500'}/frontend/pages/auth.html`)}
+
+    <p style="text-align:center;color:#334155;font-size:11px;font-family:monospace;
+               letter-spacing:0.1em;margin-top:28px">
+      Questions?
+      <a href="mailto:${process.env.SUPPORT_EMAIL}" style="color:#00e5ff;text-decoration:none">
+        ${process.env.SUPPORT_EMAIL}
+      </a>
+    </p>
+  `);
+
+  await transporter.sendMail({
+    from: `"HUVVSM SIGNAL" <${process.env.EMAIL_USER}>`,
+    to: user.email,
+    subject: `⏳ Order #${shortId} received — Awaiting confirmation — HUVVSM`,
+    html
+  });
+
+  console.log(`[EMAIL] Order pending email sent to ${user.email}`);
+};
+
+/* ============================================================ */
+/* 3b. ORDER SHIPPED EMAIL                                      */
+/* Triggered: when admin marks order status → SHIPPED          */
+/* ============================================================ */
+
+export const sendOrderShipped = async (order, user) => {
+  const shortId = order.id.slice(0, 8).toUpperCase();
+
+  const html = emailLayout(`
+    <!-- HERO -->
+    <div style="text-align:center;padding:44px 0 32px">
+      <div style="display:inline-block;width:68px;height:68px;border-radius:50%;
+                  background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.3);
+                  line-height:68px;font-size:30px;margin-bottom:24px">
+        🚚
+      </div>
+      <div style="font-family:monospace;font-size:10px;letter-spacing:0.3em;color:#00e5ff;margin-bottom:12px">
+        // PACKAGE_IN_TRANSIT
+      </div>
+      <h1 style="margin:0;font-size:26px;font-weight:900;color:#f1f5f9;letter-spacing:-0.01em">
+        ORDER SHIPPED
+      </h1>
+      <p style="color:#64748b;font-size:14px;margin-top:12px;line-height:1.65">
+        Your order is on its way, ${user.name}.<br>
+        Sit tight — it'll arrive in <strong style="color:#00e5ff">3–7 business days</strong>.
+      </p>
+    </div>
+
+    <!-- ORDER REFERENCE -->
+    <div style="background:#0a0c14;border:1px solid #1a1d2e;border-radius:12px;
+                padding:18px;margin-bottom:24px;text-align:center">
+      <div style="font-family:monospace;font-size:9px;letter-spacing:0.25em;color:#475569;margin-bottom:4px">
+        ORDER_REF
+      </div>
+      <div style="font-family:monospace;font-size:20px;font-weight:700;color:#8b5cff;letter-spacing:0.08em">
+        #${shortId}
+      </div>
+    </div>
+
+    <!-- STATUS STEPS -->
+    <div style="background:#0a0c14;border:1px solid #1a1d2e;border-radius:12px;
+                padding:24px;margin-bottom:24px">
+      <div style="font-family:monospace;font-size:9px;letter-spacing:0.25em;color:#475569;margin-bottom:18px;text-align:center">
+        ORDER_JOURNEY
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;position:relative">
+        <div style="position:absolute;top:14px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,#00e5ff 75%,#1a1d2e 75%)"></div>
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#00e5ff;margin:0 auto 8px;line-height:28px;font-size:13px;color:#03040b">✓</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#00e5ff">CONFIRMED</div>
+        </div>
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#00e5ff;margin:0 auto 8px;line-height:28px;font-size:13px;color:#03040b">✓</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#00e5ff">SHIPPED</div>
+        </div>
+        <div style="text-align:center;flex:1;position:relative">
+          <div style="width:28px;height:28px;border-radius:50%;background:#1a1d2e;margin:0 auto 8px;line-height:28px;font-size:13px;color:#475569">○</div>
+          <div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:#475569">DELIVERED</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERY INFO BOX -->
+    <div style="background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.2);
+                border-radius:12px;padding:20px;margin-bottom:28px;text-align:center">
+      <div style="font-family:monospace;font-size:9px;letter-spacing:0.25em;color:#00e5ff;margin-bottom:8px">
+        ✦ ESTIMATED_DELIVERY
+      </div>
+      <p style="color:#94a3b8;font-size:13px;line-height:1.7;margin:0">
+        Your package is now on its way. Delivery usually takes <strong style="color:#00ff7f">3–7 business days</strong>.<br>
+        You'll receive another email once it arrives.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    ${ctaButton('TRACK MY ORDER →', `${process.env.FRONTEND_URL || 'http://localhost:5500'}/frontend/pages/auth.html`)}
+
+    <p style="text-align:center;color:#334155;font-size:11px;font-family:monospace;
+               letter-spacing:0.1em;margin-top:28px">
+      Need help?
+      <a href="mailto:${process.env.SUPPORT_EMAIL}" style="color:#00e5ff;text-decoration:none">
+        ${process.env.SUPPORT_EMAIL}
+      </a>
+    </p>
+  `);
+
+  await transporter.sendMail({
+    from: `"HUVVSM SIGNAL" <${process.env.EMAIL_USER}>`,
+    to: user.email,
+    subject: `🚚 Your order #${shortId} has been shipped — HUVVSM`,
+    html
+  });
+
+  console.log(`[EMAIL] Shipped notification sent to ${user.email}`);
+};
+
+/* ============================================================ */
 /* 3. ORDER DELIVERED EMAIL                                     */
 /* Triggered: when admin marks order status → DELIVERED         */
 /* ============================================================ */

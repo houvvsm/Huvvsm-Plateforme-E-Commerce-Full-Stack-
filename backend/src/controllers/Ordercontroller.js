@@ -1,5 +1,5 @@
 import { prisma } from '../config/db.js';
-import { sendOrderConfirmation, sendOrderDelivered, sendRewardCouponEarned } from '../config/email.js';
+import { sendOrderPending, sendOrderConfirmation, sendOrderShipped, sendOrderDelivered, sendRewardCouponEarned } from '../config/email.js';
 import { processRewards } from './rewardsController.js';
 
 // @desc    Get logged-in user's orders
@@ -111,13 +111,18 @@ export const createOrder = async (req, res) => {
     });
 
 
-    // Send confirmation email (non-blocking)
+    // Send pending + confirmation emails (non-blocking)
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { name: true, email: true }
     });
 
     if (user?.email) {
+      // 1) Immediately notify customer their order is PENDING
+      sendOrderPending(order, user).catch(err => {
+        console.error('[EMAIL ERROR] Failed to send order pending email:', err.message);
+      });
+      // 2) Also send the full order confirmation/manifest
       sendOrderConfirmation(order, user).catch(err => {
         console.error('[EMAIL ERROR] Failed to send order confirmation:', err.message);
       });
@@ -246,14 +251,20 @@ export const updateOrderStatus = async (req, res) => {
       });
     });
 
-    // ── AFTER transaction: send delivery emails (non-blocking) ──
-    if (status === 'DELIVERED') {
-      const customer = await prisma.user.findUnique({
-        where: { id: order.userId },
-        select: { name: true, email: true }
-      });
+    // ── AFTER transaction: send status emails (non-blocking) ──
+    const customer = await prisma.user.findUnique({
+      where: { id: order.userId },
+      select: { name: true, email: true }
+    });
 
-      if (customer?.email) {
+    if (customer?.email) {
+      if (status === 'SHIPPED') {
+        sendOrderShipped(order, customer).catch(err =>
+          console.error('[EMAIL ERROR] Shipped email failed:', err.message)
+        );
+      }
+
+      if (status === 'DELIVERED') {
         const pointsEarned = Math.floor(order.total / 10); // approximate for email
         const newCoupons = rewardsResult?.couponsCreated || [];
 
