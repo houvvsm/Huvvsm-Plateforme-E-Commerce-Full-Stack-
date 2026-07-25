@@ -336,6 +336,21 @@
   </div>
 </div>
 
+<!-- CONFIRM RESOLVE TICKET MODAL -->
+<div id="confirmResolveTicketModal" class="modal-backdrop" data-lenis-prevent>
+  <div class="modal luxury-card confirm-modal">
+    <div class="confirm-modal-inner">
+      <div class="confirm-icon confirm-icon-success">✓</div>
+      <h3 class="confirm-title">RESOLVE_TICKET</h3>
+      <p class="confirm-body">Mark this support signal as resolved?<br>This will trigger a satisfaction review request to the customer.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost btn-sm" onclick="Modal.close('confirmResolveTicketModal')">Cancel</button>
+        <button class="btn btn-sm confirm-btn-success" id="confirmResolveTicketBtn">Resolve</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- REWARD THRESHOLD MODAL -->
 <div id="thresholdModal" class="modal-backdrop" data-lenis-prevent>
   <div class="modal luxury-card" style="width:480px">

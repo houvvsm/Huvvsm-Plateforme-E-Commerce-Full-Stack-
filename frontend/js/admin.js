@@ -2039,16 +2039,19 @@ async function updateAdminTicketStatus(ticketId, status) {
 }
 
 async function closeAdminTicketTriage(ticketId) {
-  if (!confirm('Mark this support signal as resolved? This triggers a satisfaction review request.')) return;
-  try {
-    await API.patch(`/admin/support/tickets/${ticketId}/status`, { status: 'RESOLVED' });
-    Toast.success('SIGNAL_CLOSED_AND_RESOLVED');
-    loadAdminSupportTicketsList();
-    loadAdminTicketDetails(ticketId);
-    checkAdminUnreadSupport();
-  } catch (err) {
-    Toast.error('Action failed.');
-  }
+  Modal.open('confirmResolveTicketModal');
+  document.getElementById('confirmResolveTicketBtn').onclick = async () => {
+    Modal.close('confirmResolveTicketModal');
+    try {
+      await API.patch(`/admin/support/tickets/${ticketId}/status`, { status: 'RESOLVED' });
+      Toast.success('SIGNAL_CLOSED_AND_RESOLVED');
+      loadAdminSupportTicketsList();
+      loadAdminTicketDetails(ticketId);
+      checkAdminUnreadSupport();
+    } catch (err) {
+      Toast.error('Action failed.');
+    }
+  };
 }
 
 async function submitAdminReply(ticketId) {
