@@ -1071,4 +1071,56 @@ tr.stock-row-zero { background: rgba(255,77,109,0.04); }
   text-decoration: line-through;
   opacity: 0.7;
 }
+
+/* ── AI ASSISTANT SUGGESTION CHIPS ── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  background: rgba(0, 229, 255, 0.06);
+  border: 1px solid rgba(0, 229, 255, 0.22);
+  border-radius: 999px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #00e5ff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+  user-select: none;
+}
+.chip:hover {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: rgba(0, 229, 255, 0.5);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.chip:active {
+  transform: translateY(0);
+}
+
+/* ── AI PANEL — card scrollable area ── */
+#adminAiChatMessages {
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,229,255,0.2) transparent;
+}
+#adminAiChatMessages::-webkit-scrollbar {
+  width: 4px;
+}
+#adminAiChatMessages::-webkit-scrollbar-thumb {
+  background: rgba(0,229,255,0.2);
+  border-radius: 4px;
+}
+#adminAiChatMessages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Suggestion chips row — horizontal scroll on small screens */
+#adminAiChipsRow {
+  overflow-x: auto;
+  flex-wrap: wrap;
+  scrollbar-width: none;
+}
+#adminAiChipsRow::-webkit-scrollbar { display: none; }
 

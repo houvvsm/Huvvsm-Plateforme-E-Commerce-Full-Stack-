@@ -2165,7 +2165,7 @@ function renderAdminAI() {
       <div class="glass" style="display:flex; flex-direction:column; border:1px solid var(--admin-border); border-radius:20px; background:var(--admin-panel); padding:24px; overflow:hidden; justify-content:space-between;">
         
         <!-- Chat output messages -->
-        <div id="adminAiChatMessages" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px; background:rgba(0,0,0,0.15); border:1px solid var(--admin-border); border-radius:12px; margin-bottom:14px;">
+        <div id="adminAiChatMessages" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px; background:rgba(0,0,0,0.15); border:1px solid var(--admin-border); border-radius:12px; margin-bottom:14px; min-height:200px; max-height:calc(100vh - 340px);">
           <div style="align-self:flex-start; max-width:80%; display:flex; flex-direction:column; gap:4px;">
             <div style="font-family:'Space Mono'; font-size:8px; color:#555;">HUVVSM MANAGEMENT AI</div>
             <div style="background:rgba(255,255,255,0.03); color:#fff; padding:12px 16px; border-radius:12px; border-bottom-left-radius:2px; font-size:12.5px; line-height:1.5; border:1px solid rgba(255,255,255,0.05)">
